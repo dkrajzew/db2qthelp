@@ -1,6 +1,6 @@
 db2qthelp &mdash; a DocBook document to Qt help pages converter
 
-<center><font color="red">This page is currently being built up.</font></center>
+___This page is currently being built up.___
 
 Introduction
 ============
