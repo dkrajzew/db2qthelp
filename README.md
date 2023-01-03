@@ -1,4 +1,4 @@
-db2qthelp &mdash; a DocBook document to Qt help pages converter
+db2qthelp &mdash; a DocBook document to QtHelp converter.
 
 ___This page is currently being built up.___
 
