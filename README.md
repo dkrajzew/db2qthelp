@@ -18,17 +18,13 @@ that generates in-app help pages. __db2qthelp__ does this.
 Download and Installation
 =========================
 
-The current version is [db2qthelp-0.2](https://github.com/dkrajzew/db2qthelp/releases/tag/0.2).
-
-You may install __db2qthelp__ using
+The current version is [db2qthelp-0.2](https://github.com/dkrajzew/db2qthelp/releases/tag/0.2). You may install __db2qthelp__ using
 
 ```console
 python -m pip install db2qthelp
 ```
 
-You may download a copy or fork the code at [db2qthelp&apos;s github page](https://github.com/dkrajzew/db2qthelp).
-
-Besides, you may download the current release [db2qthelp-1.0](https://github.com/dkrajzew/db2qthelp/releases/tag/1.0) here:
+You may download a copy or fork the code at [db2qthelp&apos;s github page](https://github.com/dkrajzew/db2qthelp). Besides, you may download the current release here:
 * [db2qthelp-0.2.zip](https://github.com/dkrajzew/db2qthelp/archive/refs/tags/0.2.zip)
 * [db2qthelp-0.2.tar.gz](https://github.com/dkrajzew/db2qthelp/archive/refs/tags/0.2.tar.gz)
 
