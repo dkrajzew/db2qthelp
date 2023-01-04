@@ -1,16 +1,12 @@
-ChangeLog for docbook2qthelp
-============================
-
-&copy; Daniel Krajzewicz 2022&ndash;2023
-
-https://github.com/dkrajzew/db2qthelp
-
-https://www.krajzewicz.de/blog/db2qthelp.php
+ChangeLog for db2qthelp
+=======================
 
 
-to come: docbook2qthelp-0.2
----------------------------
-* 
+to come: db2qthelp-0.2
+----------------------
+* Initial checkin
+* Adding configuration options
+
 
 
 

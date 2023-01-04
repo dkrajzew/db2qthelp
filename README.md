@@ -104,10 +104,11 @@ Examples / Users
 Change Log
 ==========
 
-Version 1.0
+Version 0.2
 -----------
 
-* Initial version
+* Initial checkin
+* Adding configuration options
 
 
 Summary
