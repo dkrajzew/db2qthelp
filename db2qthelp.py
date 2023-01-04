@@ -1,30 +1,29 @@
 from __future__ import print_function
-"""db2qthelp.py
+# ===================================================================
+# db2qthelp - a DocBook book to QtHelp project converter.
+# Version 0.2.
+#
+# Main module
+#
+# (c) Daniel Krajzewicz 2022-2023
+# - daniel@krajzewicz.de
+# - http://www.krajzewicz.de
+# - https://github.com/dkrajzew/db2qthelp
+# - http://www.krajzewicz.de/blog/db2qthelp.php
+# 
+# Available under the BSD license.
+# ===================================================================
 
-A DocBook to QtHelp converter.
-Version 0.2
 
-(c) Daniel Krajzewicz 2022-2023
-daniel@krajzewicz.de
-http://www.krajzewicz.de
-https://github.com/dkrajzew/db2qtdoc
-http://www.krajzewicz.de/blog/db2qtdoc.php
-
-Available under the BSD License.
-"""
-
-
+# --- imports -------------------------------------------------------
 import os
 import shutil
 import glob
 import re
+from optparse import OptionParser
 
 
-# Configuration
-appName = "shaderwb"
-appVersion = "0.2.0"
-
-# Style - exclude into a file
+# --- variables and constants ---------------------------------------
 style = """
 <style>
 body {
@@ -56,41 +55,51 @@ div.informalequation { text-align: center; font-style: italic; }
 # Methods
 
 def getID(c):
+    """Returns the ID of the current section
+    
+    :param c: The text content
+    """
     id = c[c.find("<a name=\"")+9:]
     id = id[:id.find("\"")]
     return id
 
+
 def getName(c):
+    """Returns the name of the current section
+    
+    :param c: The text content
+    """
     name = c[c.find("</a>")+4:]
     name = name[:name.find("</h")]
     name = name.replace("\"", "'")
     name = name.strip()
     return name
 
+
 def writeSectionsRecursive(c, fdo_content, level):
+    """
+    
+    :param c: The character (string) content
+    :param fdo_content: The content output file
+    :param level: intendation level
+    """
     id = getID(c)
     if id=="user":
-        id = "index"
+        id = "index" # @todo: check!
     name = getName(c)
     indent = " "*(level*3) 
     fdo_content.write(indent + "<li><a href=\"%s.html\">%s</a></li>\n" % (id, name))
     toc = indent + "<section title=\"%s\" ref=\"%s.html\">\n" % (name, id)
     keywords = "   <keyword name=\"%s\" ref=\"./%s.html\"/>\n" %  (name, id)
-    #print ("%s %s %s" % (id, name, level))
     """
-    if level>3:
-        fdo = open("qtdoc/%s.html" % id, "w")
-        fdo.write(c)
-        fdo.close()
-        toc += indent + "</section>\n"
-        return toc
+    #if level>3:
+    #    fdo = open("qtdoc/%s.html" % id, "w")
+    #    fdo.write(c)
+    #    fdo.close()
+    #    toc += indent + "</section>\n"
+    #    return toc
     """
-    #print ("a1 %s" % (c.find("<div class=\"sect%s\">" % level)))
     subs = c.split("<div class=\"sect%s\">" % level)
-    """
-    if id=="user-palettes":
-        print (subs)
-    """
     fdo = open("qtdoc/%s.html" % id, "w")
     if subs[0].rfind("</div>")>=len(subs[0])-6:
         subs[0] = subs[0][:subs[0].rfind("</div>")]
@@ -101,7 +110,6 @@ def writeSectionsRecursive(c, fdo_content, level):
     subs[0] = "<html><head>" + style + "</head><body>" + subs[0] + "</body></html>"
     fdo.write(subs[0])
     fdo.close()
-    #print ("a2 %s " % len(subs))
     if len(subs)>1:
         fdo_content.write(indent + "<ul>\n")
         for i,sub in enumerate(subs):
@@ -117,30 +125,88 @@ def writeSectionsRecursive(c, fdo_content, level):
         fdo_content.write(indent + "</ul>\n")
     toc += indent + "</section>\n"
     return toc, keywords
-    
 
-def main(argv):
+
+def _makeClean(destFolder):
+    """ Deletes previously collected files
+    
+    :param destFolder: The destination folder (where the documentation is built)
+    """
     # delete previous files
-    files = glob.glob("qtdoc/*.html")
-    files.extend(glob.glob("qtdoc/*.png"))
-    files.extend(glob.glob("qtdoc/*.gif"))
+    files = glob.glob(destFolder + "/*.html")
+    files.extend(glob.glob(destFolder + "/*.png"))
+    files.extend(glob.glob(destFolder + "/*.gif"))
     for f in files:
         os.remove(f)
+    
+    
+def _copyFiles(srcFolder, destFolder):    
+    """Collects images to include in the documenatation
+    
+    Copies them from the source to the destination folder
+    
+    :param srcFolder: The source folder (where images are located)
+    :param destFolder: The destination folder (where the documentation is built)
+    """
     # copy new files
     files = glob.glob("./user_images/*.png")
     files.extend(glob.glob("./user_images/icons/*.png"))
     for f in files:
         p, n = os.path.split(f)
-        shutil.copy(f, "qtdoc/" + n)
+        shutil.copy(f, destFolder + "/" + n)
 
-    # open output documents
-    fd = open("shaderwb_userdocs.html")
+
+def readDocBook(file):
+    """Reads the named file
+    
+    :param file: The path to the docbook HTML file to read
+    """
+    fd = open(file)
     doc = fd.read()
     fd.close()
+    return doc
 
+
+def main(argv):
+    sys.tracebacklimit = 0
+    # parse options
+    optParser = OptionParser(usage="usage:\n  db2qthelp.py [options]", version="db2qthelp.py 0.2")
+    optParser.add_option("-n", "--namespace", dest="namespace", default="org", help="Sets the documentation namespace")
+    optParser.add_option("-a", "--appname", dest="appname", default=None, help="Sets the name of the application to build the docs for")
+    optParser.add_option("-V", "--version", dest="version", default=None, help="Sets the version of the application to build the docs for")
+    optParser.add_option("-s", "--source", dest="source", default="user_images", help="Sets the image source folder")
+    optParser.add_option("-d", "--destination", dest="destination", default="qtdoc", help="Sets the output folder")
+    optParser.add_option("-i", "--input", dest="input", default=None, help="Defines the DocBook HTML document to parse")
+    options, remaining_args = optParser.parse_args(args=args)
+    # check options
+    ret = 0
+    if options.input is None:
+        print("Error: no input file given (use -i <HTML_DOCBOOK>)...", file=sys.stderr)
+        ret = 2
+    if options.appname is None:
+        print("Error: no application name given (use -a <NAME>)...", file=sys.stderr)
+        ret = 2
+    if options.version is None:
+        print("Error: no application version given (use -V <APP_VERSION>)...", file=sys.stderr)
+        ret = 2
+    if ret!=0:
+        print("Usage: db2qthelp.py -i <HTML_DOCBOOK> -a <APPNAME> -V <APP_VERSION> [options]+", file=sys.stderr)
+        sys.exit(2)
+    
+    # get settings
+    srcFolder = options.source
+    destFolder = options.destination
+    tocFileName = destFolder + "/toc.html"
+    # delete previous files
+    _makeClean(destFolder)
+    # copy images
+    _copyFiles(srcFolder, destFolder)
+    # read the docbook file (content)
+    doc = readDocBook(options.input)
+    # 
     toc = ""
     keywords = ""
-    fdo_content = open("qtdoc/toc.html", "w")
+    fdo_content = open(tocFileName, "w")
     fdo_content.write("<html><head>" + style + "</head><body>\n")
     chapters = doc.split("<div class=\"chapter\">")
     t = chapters[-1].split('<div class="appendix">')
@@ -152,25 +218,22 @@ def main(argv):
         keywords += keysA
     fdo_content.write("</body></html>\n")
     fdo_content.close()
-    
-    fd = open("qtdoc/qhelpproject_template.qhp")
+    # read template
+    fd = open("qhelpproject_template.qhp")
     prj = fd.read()
     fd.close()
-
     # write project
-    prj = prj.replace("%appname%", appName).replace("%appver%", appVersion).replace("%toc%", toc).replace("%keywords%", keywords)
-    fdo = open("qtdoc/shaderwb.qhp", "w")
+    prj = prj.replace("%namespace%", options.namespace).replace("%appname%", options.appname).replace("%appver%", options.version).replace("%toc%", toc).replace("%keywords%", keywords)
+    path = destFolder + "/" + options.appname
+    fdo = open(path + ".qhp", "w")
     fdo.write(prj)
     fdo.close()
-
     # generate QtDocs
     # !!! patch paths
-    os.system("C:\\Qt\\5.14.2\\msvc2017\\bin\\qhelpgenerator qtdoc/shaderwb.qhp -o qtdoc/shaderwb.qch")
-    os.system("C:\\Qt\\5.14.2\\msvc2017\\bin\\qcollectiongenerator qtdoc/shaderwb.qhcp -o qtdoc/shaderwb.qhc")
+    os.system("C:\\Qt\\5.14.2\\msvc2017\\bin\\qhelpgenerator %s.qhp -o %s.qch" % (path, path))
+    os.system("C:\\Qt\\5.14.2\\msvc2017\\bin\\qcollectiongenerator %s.qhcp -o %s.qhc" % (path, path))
 
     
-    
-
 # -- main check
 if __name__ == '__main__':
     main(sys.argv)
