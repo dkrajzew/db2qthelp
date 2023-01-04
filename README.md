@@ -1,11 +1,18 @@
-db2qthelp &mdash; a DocBook document to QtHelp converter.
+[![License: BSD](https://img.shields.io/badge/License-BSD-green.svg)](https://github.com/dkrajzew/db2qthelp/blob/master/LICENSE) 
+[![PyPI version](https://badge.fury.io/py/db2qthelp.svg)](https://pypi.python.org/pypi/db2qthelp)
+[![Downloads](https://pepy.tech/badge/db2qthelp)](https://pepy.tech/project/db2qthelp)
 
-___This page is currently being built up.___
+
+db2qthelp &mdash; a DocBook book to QtHelp project converter
 
 Introduction
 ============
 
-__db2qthelp__ converts a DocBook document to a Qt help project.
+__db2qthelp__ converts a DocBook book to a QtHelp project.
+
+__db2qthelp__ is in an early stage of "development". It works well for me but it may work with my setup only.
+
+Any feedback is appreciated.
 
 
 Background
@@ -18,13 +25,17 @@ that generates in-app help pages. __db2qthelp__ does this.
 Download and Installation
 =========================
 
-The current version is [db2qthelp-0.2](https://github.com/dkrajzew/db2qthelp/releases/tag/0.2). You may install __db2qthelp__ using
+The current version is [db2qthelp-0.2](https://github.com/dkrajzew/db2qthelp/releases/tag/0.2).
+
+You may install __db2qthelp__ using
 
 ```console
 python -m pip install db2qthelp
 ```
 
-You may download a copy or fork the code at [db2qthelp&apos;s github page](https://github.com/dkrajzew/db2qthelp). Besides, you may download the current release here:
+You may download a copy or fork the code at [db2qthelp&apos;s github page](https://github.com/dkrajzew/db2qthelp).
+
+Besides, you may download the current release [db2qthelp-0.2](https://github.com/dkrajzew/db2qthelp/releases/tag/0.2) here:
 * [db2qthelp-0.2.zip](https://github.com/dkrajzew/db2qthelp/archive/refs/tags/0.2.zip)
 * [db2qthelp-0.2.tar.gz](https://github.com/dkrajzew/db2qthelp/archive/refs/tags/0.2.tar.gz)
 
@@ -42,6 +53,13 @@ Usage
 -----
 
 __db2qthelp__ is implemented in [Python](https://www.python.org/). It is started on the command line.
+
+__db2qthelp__ parses a single-file HTML representation of a DocBook book. If you have a DocBook book you have 
+to convert it to a single-file HTML document. The images you use within the book should be located in folders.
+
+As soon as you have converted your DocBook book into a single-file HTML page, you may run __db2qthelp__ to
+convert it into a QtHelp project.
+
 
 The option 
 
@@ -96,4 +114,5 @@ Summary
 =======
 
 Well, have fun. If you have any comments / ideas / issues, please submit them to [db2qthelp's issue tracker](https://github.com/dkrajzew/db2qthelp/issues) on github.
+
 
