@@ -1,15 +1,17 @@
-"""setup.py
-
-This is the setup file for 
-
- db2qthelp - A DocBook to QtHelp converter.
-
-(c) Daniel Krajzewicz 2022
-daniel@krajzewicz.de
-https://www.krajzewicz.de
-
-Available under the BSD License.
-"""
+# ===================================================================
+# db2qthelp - a DocBook book to QtHelp project converter.
+# Version 0.2.
+#
+# Project setup script
+#
+# (c) Daniel Krajzewicz 2022-2023
+# - daniel@krajzewicz.de
+# - http://www.krajzewicz.de
+# - https://github.com/dkrajzew/db2qthelp
+# - http://www.krajzewicz.de/blog/db2qthelp.php
+# 
+# Available under the BSD license.
+# ===================================================================
 
 # --- imports -------------------------------------------------------
 import setuptools
@@ -24,7 +26,7 @@ setuptools.setup(
   version="0.2",
   author="dkrajzew",
   author_email="d.krajzewicz@gmail.com",
-  description="A DocBook to QtHelp converter",
+  description="A DocBook book to QtHelp converter",
   long_description=long_description,
   long_description_content_type="text/markdown",
   url="https://github.com/dkrajzew/db2qthelp",
