@@ -12,4 +12,4 @@
 # 
 # Available under the BSD license.
 # ===================================================================
-from docbook2qthelp import *
+
