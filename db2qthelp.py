@@ -17,6 +17,7 @@ from __future__ import print_function
 
 # --- imports -------------------------------------------------------
 import os
+import sys
 import shutil
 import glob
 import re
@@ -48,28 +49,59 @@ div.informalequation { text-align: center; font-style: italic; }
 .note p { background-color: #e0f0ff; margin: 8px 8px 8px 8px; }
 .tip p { background-color: #c0ffc0; margin: 8px 8px 8px 8px; }
 .warning p { background-color: #ffff80; margin: 8px 8px 8px 8px; }
-
 </style>
 """
 
-# Methods
+template = """<?xml version="1.0" encoding="latin1"?>
+<QtHelpProject version="1.0">
+    <namespace>%namespace%.%appname%_v%appver%</namespace>
+    <virtualFolder>doc</virtualFolder>
+    <filterSection>
+        <filterAttribute>%appname%</filterAttribute>
+        <filterAttribute>%appver%</filterAttribute>
+        <toc>
+%toc%
+        </toc>
+        <keywords>
+%keywords%
+        </keywords>
+        <files>
+            <file>*.html</file>
+            <file>*.png</file>
+            <file>*.gif</file>
+        </files>
+    </filterSection>
+</QtHelpProject>
+"""
 
-def getID(c):
+
+# --- methods -------------------------------------------------------
+def getID(html):
     """Returns the ID of the current section
+
+    The value of the first a-element's name attribute is assumed to be the ID.
     
-    :param c: The text content
+    Args:
+        html (string): The HTML snippet to get the next ID from
+
+    Returns:
+        string: The next ID found in the snippet
     """
-    id = c[c.find("<a name=\"")+9:]
+    id = html[html.find("<a name=\"")+9:]
     id = id[:id.find("\"")]
     return id
 
 
-def getName(c):
+def getName(html):
     """Returns the name of the current section
     
-    :param c: The text content
+    Args:
+        html (string): The HTML snippet to get the next name from
+
+    Returns:
+        string: The next name found in the snippet
     """
-    name = c[c.find("</a>")+4:]
+    name = html[html.find("</a>")+4:]
     name = name[:name.find("</h")]
     name = name.replace("\"", "'")
     name = name.strip()
@@ -79,9 +111,14 @@ def getName(c):
 def writeSectionsRecursive(c, fdo_content, level):
     """
     
-    :param c: The character (string) content
-    :param fdo_content: The content output file
-    :param level: intendation level
+    Args:
+        c (string): The character (string) content
+        fdo_content (output file handle): The content output file
+        level (int): intendation level
+
+    Returns:
+        toc, keywords: The table of content and the collected keywords
+
     """
     id = getID(c)
     if id=="user":
@@ -128,9 +165,10 @@ def writeSectionsRecursive(c, fdo_content, level):
 
 
 def _makeClean(destFolder):
-    """ Deletes previously collected files
+    """ Deletes previously collected and built files
     
-    :param destFolder: The destination folder (where the documentation is built)
+    Args:
+        destFolder (string): The destination folder (where the documentation is built)
     """
     # delete previous files
     files = glob.glob(destFolder + "/*.html")
@@ -145,8 +183,9 @@ def _copyFiles(srcFolder, destFolder):
     
     Copies them from the source to the destination folder
     
-    :param srcFolder: The source folder (where images are located)
-    :param destFolder: The destination folder (where the documentation is built)
+    Args:
+        srcFolder (string): The source folder (where images are located)
+        destFolder (string): The destination folder (where the documentation is built)
     """
     # copy new files
     files = glob.glob("./user_images/*.png")
@@ -156,47 +195,46 @@ def _copyFiles(srcFolder, destFolder):
         shutil.copy(f, destFolder + "/" + n)
 
 
-def readDocBook(file):
+def readDocBook(filename):
     """Reads the named file
     
-    :param file: The path to the docbook HTML file to read
+    Args:
+        filename (string): The path to the docbook HTML file to read
     """
-    fd = open(file)
+    fd = open(filename)
     doc = fd.read()
     fd.close()
     return doc
 
 
-def main(argv):
+def main(arguments):
     sys.tracebacklimit = 0
     # parse options
     optParser = OptionParser(usage="usage:\n  db2qthelp.py [options]", version="db2qthelp.py 0.2")
-    optParser.add_option("-n", "--namespace", dest="namespace", default="org", help="Sets the documentation namespace")
-    optParser.add_option("-a", "--appname", dest="appname", default=None, help="Sets the name of the application to build the docs for")
-    optParser.add_option("-V", "--version", dest="version", default=None, help="Sets the version of the application to build the docs for")
+    optParser.add_option("-i", "--input", dest="input", default=None, help="Defines the DocBook HTML document to parse")
     optParser.add_option("-s", "--source", dest="source", default="user_images", help="Sets the image source folder")
     optParser.add_option("-d", "--destination", dest="destination", default="qtdoc", help="Sets the output folder")
-    optParser.add_option("-i", "--input", dest="input", default=None, help="Defines the DocBook HTML document to parse")
-    options, remaining_args = optParser.parse_args(args=args)
+    optParser.add_option("-t", "--template", dest="template", default="template.qhp", help="Defines the QtHelp project template to use")
+    optParser.add_option("-g", "--generate", dest="generate", action="store_true", default=False, help="If set, a template is generated")
+    optParser.add_option("-p", "--path", dest="path", default="", help="Sets the path to the Qt binaries to use")
+    options, remaining_args = optParser.parse_args(args=arguments)
+    # - generate the template and quit, if wished
+    if options.generate:
+        with open(options.template, "w") as fdo:
+            fdo.write(template)
+        print ("Written qhp template to '%s'" % options.template)
+        sys.exit(0)
+    # - build documentation
     # check options
-    ret = 0
     if options.input is None:
         print("Error: no input file given (use -i <HTML_DOCBOOK>)...", file=sys.stderr)
-        ret = 2
-    if options.appname is None:
-        print("Error: no application name given (use -a <NAME>)...", file=sys.stderr)
-        ret = 2
-    if options.version is None:
-        print("Error: no application version given (use -V <APP_VERSION>)...", file=sys.stderr)
-        ret = 2
-    if ret!=0:
-        print("Usage: db2qthelp.py -i <HTML_DOCBOOK> -a <APPNAME> -V <APP_VERSION> [options]+", file=sys.stderr)
+        print("Usage: db2qthelp.py -i <HTML_DOCBOOK> [options]+", file=sys.stderr)
         sys.exit(2)
-    
     # get settings
     srcFolder = options.source
     destFolder = options.destination
     tocFileName = destFolder + "/toc.html"
+    qtPath = options.path
     # delete previous files
     _makeClean(destFolder)
     # copy images
@@ -228,10 +266,9 @@ def main(argv):
     fdo = open(path + ".qhp", "w")
     fdo.write(prj)
     fdo.close()
-    # generate QtDocs
-    # !!! patch paths
-    os.system("C:\\Qt\\5.14.2\\msvc2017\\bin\\qhelpgenerator %s.qhp -o %s.qch" % (path, path))
-    os.system("C:\\Qt\\5.14.2\\msvc2017\\bin\\qcollectiongenerator %s.qhcp -o %s.qhc" % (path, path))
+    # generate QtHelp
+    os.system("%s/qhelpgenerator %s.qhp -o %s.qch" % (qtPath, path, path))
+    os.system("%s/qcollectiongenerator %s.qhcp -o %s.qhc" % (qtPath, path, path))
 
     
 # -- main check

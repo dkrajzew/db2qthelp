@@ -33,7 +33,7 @@ setuptools.setup(
   packages=setuptools.find_packages(),
   # see https://pypi.org/classifiers/
   classifiers=[
-    "Development Status :: 4 - Beta",
+    "Development Status :: 2 - Pre-Alpha",
     "Environment :: Console",
     "Programming Language :: Python",
     "Programming Language :: Python :: 2.7",
