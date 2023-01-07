@@ -10,7 +10,7 @@ from __future__ import print_function
 # - http://www.krajzewicz.de
 # - https://github.com/dkrajzew/db2qthelp
 # - http://www.krajzewicz.de/blog/db2qthelp.php
-# 
+#
 # Available under the BSD license.
 # ===================================================================
 
@@ -26,9 +26,13 @@ def test_main_empty(capsys):
         assert type(e)==type(SystemExit())
         assert e.code==2
     captured = capsys.readouterr()
-    assert captured.err.replace("__main__.py", "db2qthelp.py") == "Error: no input file given (use -i <HTML_DOCBOOK>)...\nUsage: db2qthelp.py -i <HTML_DOCBOOK> [options]+\n"
+    assert captured.err.replace("__main__.py", "db2qthelp.py") == """Error: no input file given (use -i <HTML_DOCBOOK>)...
+Error: no application name given (use -a <APP_NAME>)...
+Error: no source url given(use -s <SOURCE_URL>)...
+Usage: db2qthelp.py -i <HTML_DOCBOOK> [options]+
+"""
     assert captured.out == ""
-    
+
 
 def test_main_help(capsys):
     """Test behaviour when help is wished"""
@@ -48,8 +52,12 @@ Options:
   -h, --help            show this help message and exit
   -i INPUT, --input=INPUT
                         Defines the DocBook HTML document to parse
+  -a APPNAME, --appname=APPNAME
+                        Sets the name of the application
   -s SOURCE, --source=SOURCE
-                        Sets the image source folder
+                        Sets the documentation source url
+  -f FILES, --files=FILES
+                        Sets the folder to collect files from
   -d DESTINATION, --destination=DESTINATION
                         Sets the output folder
   -t TEMPLATE, --template=TEMPLATE
@@ -58,7 +66,7 @@ Options:
   -p PATH, --path=PATH  Sets the path to the Qt binaries to use
 """
     assert captured.err == ""
-    
+
 
 """
 def test_main_generate_short(capsys, tmp_path):
