@@ -5,8 +5,6 @@
 
 db2qthelp &mdash; a DocBook book to QtHelp project converter
 
-db2qthelp &mdash; a DocBook book to QtHelp project converter
-
 Introduction
 ============
 
