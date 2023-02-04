@@ -1,7 +1,7 @@
 from __future__ import print_function
 # ===================================================================
 # db2qthelp - a DocBook book to QtHelp project converter.
-# Version 0.2.
+# Version 0.4.
 #
 # Main module
 #
@@ -296,7 +296,7 @@ def main(arguments):
     """
     #sys.tracebacklimit = 0
     # parse options
-    optParser = OptionParser(usage="usage:\n  db2qthelp.py [options]", version="db2qthelp.py 0.2")
+    optParser = OptionParser(usage="usage:\n  db2qthelp.py [options]", version="db2qthelp.py 0.4")
     optParser.add_option("-i", "--input", type="string", dest="input", default=None, help="Defines the DocBook HTML document to parse")
     optParser.add_option("-a", "--appname", type="string", dest="appname", default=None, help="Sets the name of the application")
     optParser.add_option("-s", "--source", type="string", dest="source", default=None, help="Sets the documentation source url")
