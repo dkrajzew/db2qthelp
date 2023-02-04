@@ -227,7 +227,7 @@ def _copyFiles(srcFolder, destFolder):
             shutil.copy(f, destFolder + "/" + n)
 
 
-def main(arguments):
+def main(arguments=None):
     """The main method using parameter from the command line.
 
     The application deletes previously collected and build .html, .png, and
