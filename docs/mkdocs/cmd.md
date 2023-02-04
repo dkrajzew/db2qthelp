@@ -33,13 +33,13 @@ What we get is a HTML-representation of the DocBook user docs named &ldquo;userd
 We now need a template for our QtHelp project. Generate it using __db2qthelp__ by calling:
 
 ```console
-python db2qthelp --generate
+db2qthelp --generate
 ```
 
 You will get a file named &ldquo;template.qhp&rdquo;. It should be located in the same folder as your DocBook document. You may though name it differently to set it&apos;s name on generation use:
 
 ```console
-python db2qthelp --generate --template new_template_name.qhp
+db2qthelp --generate --template new_template_name.qhp
 ```
 
 Open it in an editor. It should look like this:
@@ -81,7 +81,7 @@ You may add additional filter attributes.
 Well, that&apos;s almost everything. Run __db2qthelp__ again to build the documentation:
 
 ```console
-python db2qthelp -i userdocs.html -t new_template_name.qhp -s org.foo.bar.MyFancyApp_v0.1 -a MyFancyApp -p c:\Qt\bin
+db2qthelp -i userdocs.html -t new_template_name.qhp -s org.foo.bar.MyFancyApp_v0.1 -a MyFancyApp -p c:\Qt\bin
 ```
 
 The options tell __db2qthelp__ to read the HTML document &ldquo;userdocs.html&rdquo; generated from our original DocBook book, to use our project template &ldquo;new_template_name.qhp&rdquo; and that images and figures are located in &ldquo;images&rdquo;.
@@ -134,14 +134,14 @@ Examples
 --------
 
 ```console
-python db2qthelp --generate
+db2qthelp --generate
 ```
 
 Generates the project template file &ldquo;template.qhp&rdquo;.
 
 
 ```console
-python db2qthelp -i userdocs.html -t template.qhp -s org.foo.bar.MyFancyApp_v0.1  --path c:\Qt\bin
+db2qthelp -i userdocs.html -t template.qhp -s org.foo.bar.MyFancyApp_v0.1  --path c:\Qt\bin
 ```
 
 Reads the HTML document &ldquo;userdocs.html&rdquo; and the project template &ldquo;template.qhp&rdquo; and converts the HTML document to QtHelp assuming images etc. being located in &ldquo;images&rdquo;. The Qt binaries are assumed to be found in &ldquo;c:\Qt\bin\&rdquo;.
