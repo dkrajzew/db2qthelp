@@ -20,9 +20,11 @@ nav:
     - Installation: install.md
     - Usage: cmd.md
     - ChangeLog: changes.md
+    - License (BSD): license.md
     - Legal: legal.md
-    - License (BSD): https://github.com/dkrajzew/db2qthelp/blob/master/LICENSE
     - API: api.md
+    - Developer Docs:
+        - How To Release: release.md
 
 markdown_extensions:
     - admonition
