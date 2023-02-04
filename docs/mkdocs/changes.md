@@ -2,8 +2,9 @@ ChangeLog for db2qthelp
 =======================
 
 
-to come: db2qthelp-0.2
-----------------------
+db2qthelp-0.2 (07.01.2023)
+--------------------------
+
 * Initial checkin
 * Adding configuration options
 * Adding a documentation
