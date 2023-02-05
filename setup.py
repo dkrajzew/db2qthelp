@@ -1,6 +1,6 @@
 # ===================================================================
 # db2qthelp - a DocBook book to QtHelp project converter.
-# Version 0.4.
+# Version 0.4
 #
 # Project setup script
 #

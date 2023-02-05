@@ -97,10 +97,10 @@ def getID(html):
     The value of the first a-element's name attribute is assumed to be the ID.
 
     Args:
-        html (string): The HTML snippet to get the next ID from
+        html (str): The HTML snippet to get the next ID from
 
     Returns:
-        string: The next ID found in the snippet
+        (str): The next ID found in the snippet
     """
     id = html[html.find("<a name=\"")+9:]
     id = id[:id.find("\"")]
@@ -111,10 +111,10 @@ def getName(html):
     """Returns the name of the current section.
 
     Args:
-        html (string): The HTML snippet to get the next name from
+        html (str): The HTML snippet to get the next name from
 
     Returns:
-        string: The next name found in the snippet
+        (str): The next name found in the snippet
     """
     name = html[html.find("</a>")+4:]
     name = name[:name.find("</h")]
@@ -138,15 +138,15 @@ def writeSectionsRecursive(c, srcFolder, destFolder, sourceURL, fdo_content, lev
     The (recursively) collected keywords and toc are returned.
 
     Args:
-        c (string): The (string) content of the DocBook book section or appendix
-        srcFolder (string array): The source folder(s) (where images are located)
-        destFolder (string): The destination folder (where the documentation is built)
-        sourceURL (string): The URL of the built QtHelp pages
-        fdo_content (output file handle): The content output file
+        c (str): The (string) content of the DocBook book section or appendix
+        srcFolder (List[str]): The source folder(s) (where images are located)
+        destFolder (str): The destination folder (where the documentation is built)
+        sourceURL (str): The URL of the built QtHelp pages
+        fdo_content (file): The content output file
         level (int): intendation level
 
     Returns:
-        toc, keywords: The table of content and the collected keywords
+        Tuple[str, str]: The table of content and the collected keywords
 
     """
     global style
@@ -199,7 +199,7 @@ def _makeClean(destFolder):
     Deletes all .html, .png, and .gif files within the destination folder.
 
     Args:
-        destFolder (string): The destination folder (where the documentation is built)
+        destFolder (str): The destination folder (where the documentation is built)
     """
     # delete previous files
     files = glob.glob(destFolder + "/*.html")
@@ -215,8 +215,8 @@ def _copyFiles(srcFolder, destFolder):
     Copies them from the source to the destination folder.
 
     Args:
-        srcFolder (string): The source folder(s) (where images are located)
-        destFolder (string): The destination folder (where the documentation is built)
+        srcFolder (str): The source folder(s) (where images are located)
+        destFolder (str): The destination folder (where the documentation is built)
     """
     # copy new files
     for s in srcFolder:
@@ -256,7 +256,7 @@ def main(arguments=None):
     &lt;QT_PATH&gt;/qcollectiongenerator &lt;APPLICATION_NAME&gt;.qhcp -o &lt;APPLICATION_NAME&gt;.qhc
 
     Args:
-        arguments (string array): The command line arguments, parsed as options using OptionParser.
+        arguments (List[str]): The command line arguments, parsed as options using OptionParser.
 
     Options
     -------
