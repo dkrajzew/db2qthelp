@@ -25,4 +25,4 @@ that generates in-app help pages. __db2qthelp__ does this.
 License
 =======
 
-__degrotesque__ is licensed under the [BSD license](LICENSE).
+__degrotesque__ is licensed under the [BSD license](license.md).
