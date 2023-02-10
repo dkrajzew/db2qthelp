@@ -1,7 +1,8 @@
 [![License: BSD](https://img.shields.io/badge/License-BSD-green.svg)](https://github.com/dkrajzew/db2qthelp/blob/master/LICENSE)
 [![PyPI version](https://badge.fury.io/py/db2qthelp.svg)](https://pypi.python.org/pypi/db2qthelp)
 [![Downloads](https://pepy.tech/badge/db2qthelp)](https://pepy.tech/project/db2qthelp)
-
+[![Coverage](https://img.shields.io/badge/coverage-49%25-success)](https://img.shields.io/badge/coverage-49%25-success)
+[![Documentation Status](https://readthedocs.org/projects/db2qthelp/badge/?version=latest)](https://db2qthelp.readthedocs.io/en/latest/?badge=latest)
 
 db2qthelp &mdash; a DocBook book to QtHelp project converter
 
