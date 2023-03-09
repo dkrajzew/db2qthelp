@@ -2,6 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/db2qthelp.svg)](https://pypi.python.org/pypi/db2qthelp)
 [![Downloads](https://pepy.tech/badge/db2qthelp)](https://pepy.tech/project/db2qthelp)
 [![Coverage](https://img.shields.io/badge/coverage-49%25-success)](https://img.shields.io/badge/coverage-49%25-success)
+[![Documentation Status](https://readthedocs.org/projects/db2qthelp/badge/?version=latest)](https://db2qthelp.readthedocs.io/en/latest/?badge=latest)
 
 db2qthelp &mdash; a DocBook book to QtHelp project converter
 
@@ -197,6 +198,7 @@ Reads the HTML document &ldquo;userdocs.html&rdquo; and the project template &ld
 Further Documentation
 ---------------------
 
+<<<<<<< HEAD
 * A complete documentation is located at:
    * <https://db2qthelp.readthedocs.io/en/latest/> and
    * <https://krajzewicz.de/docs/db2qthelp/index.html>
@@ -206,6 +208,16 @@ Further Documentation
 * The PyPI page is located at: <https://pypi.org/project/db2qthelp/>
 * The code documentation (pydoc) is located at: <http://www.krajzewicz.de/docs/db2qthelp.html>
 
+=======
+* The complete documentation is located at:
+  * <https://db2qthelp.readthedocs.io/en/latest/> and
+  * https://krajzewicz.de/docs/db2qthelp/index.html
+* The github repository is located at: https://github.com/dkrajzew/db2qthelp
+* Discussions are open at <https://github.com/dkrajzew/db2qthelp/discussions>
+* The issue tracker is located at: https://github.com/dkrajzew/db2qthelp/issues
+* The PyPI page is located at: https://pypi.org/project/db2qthelp/
+* The code documentation (pydoc) is located at: http://www.krajzewicz.de/docs/db2qthelp.html
+>>>>>>> 94f1c15e2909f4444ffb96edb3f3ea439ba9d8ed
 
 
 Examples / Users

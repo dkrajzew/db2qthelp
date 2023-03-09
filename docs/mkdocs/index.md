@@ -3,7 +3,10 @@
 [![Downloads](https://pepy.tech/badge/db2qthelp)](https://pepy.tech/project/db2qthelp)
 [![Coverage](https://img.shields.io/badge/coverage-49%25-success)](https://img.shields.io/badge/coverage-49%25-success)
 [![Documentation Status](https://readthedocs.org/projects/db2qthelp/badge/?version=latest)](https://db2qthelp.readthedocs.io/en/latest/?badge=latest)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 94f1c15e2909f4444ffb96edb3f3ea439ba9d8ed
 
 db2qthelp &mdash; a DocBook book to QtHelp project converter
 
