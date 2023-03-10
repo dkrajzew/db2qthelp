@@ -67,37 +67,9 @@ Options:
     assert captured.err == ""
 
 
-"""
-def test_main_generate_short(capsys, tmp_path):
-    import db2qthelp
-    p1 = tmp_path / "template.qhp"
-    try:
-        db2qthelp.main(["-g"])
-        assert False
-    except SystemExit as e:
-        assert type(e)==type(SystemExit())
-        assert e.code==0
-    assert p1.read_text() == db2qthelp.template
-    captured = capsys.readouterr()
-    assert captured.out.replace("__main__.py", "db2qthelp.py") == "Written qhp template to 'template.qhp'\n"
 
-
-def test_main_generate_long(capsys, tmp_path):
-    import db2qthelp
-    p1 = tmp_path / "template.qhp"
-    try:
-        db2qthelp.main(["--generate"])
-        assert False
-    except SystemExit as e:
-        assert type(e)==type(SystemExit())
-        assert e.code==0
-    assert p1.read_text() == db2qthelp.template
-    captured = capsys.readouterr()
-    assert captured.out.replace("__main__.py", "db2qthelp.py") == "Written qhp template to 'template.qhp'\n"
-"""
-
-
-def test_main_generate_alt_name_short(capsys, tmp_path):
+def test_main_generate_tpl__short(capsys, tmp_path):
+    """Generates a template using the short option"""
     import db2qthelp
     p1 = tmp_path / "test.qhp"
     try:
@@ -111,7 +83,8 @@ def test_main_generate_alt_name_short(capsys, tmp_path):
     assert captured.out.replace("__main__.py", "db2qthelp.py") == "Written qhp template to '%s'\n" % p1
 
 
-def test_main_generate_alt_name_long(capsys, tmp_path):
+def test_main_generate_tpl__long(capsys, tmp_path):
+    """Generates a template using the long option"""
     import db2qthelp
     p1 = tmp_path / "test.qhp"
     try:
