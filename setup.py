@@ -34,6 +34,7 @@ setuptools.setup(
         'Documentation': 'https://db2qthelp.readthedocs.io/',
         'Source': 'https://github.com/dkrajzew/db2qthelp',
         'Tracker': 'https://github.com/dkrajzew/db2qthelp/issues',
+        'Discussions': 'https://github.com/dkrajzew/db2qthelp/discussions',
     },
     license='BSD',
     # add modules
