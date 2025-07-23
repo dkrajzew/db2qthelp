@@ -1,20 +1,23 @@
-from __future__ import print_function
-# ===================================================================
-# db2qthelp - a DocBook book to QtHelp project converter.
-#
-# Main module
-#
-# (c) Daniel Krajzewicz 2022-2023
-# daniel@krajzewicz.de
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""db2qthelp - a DocBook book to QtHelp project converter"""
+# ===========================================================================
+__author__     = "Daniel Krajzewicz"
+__copyright__  = "Copyright 2022-2025, Daniel Krajzewicz"
+__credits__    = ["Daniel Krajzewicz"]
+__license__    = "BSD"
+__version__    = "0.2.0"
+__maintainer__ = "Daniel Krajzewicz"
+__email__      = "daniel@krajzewicz.de"
+__status__     = "Development"
+# ===========================================================================
 # - https://github.com/dkrajzew/db2qthelp
 # - http://www.krajzewicz.de/docs/db2qthelp/index.html
 # - http://www.krajzewicz.de
-#
-# Available under the BSD license.
-# ===================================================================
+# ===========================================================================
 
 
-# --- imports -------------------------------------------------------
+# --- imports ---------------------------------------------------------------
 import os
 import sys
 import shutil
@@ -23,7 +26,7 @@ import re
 from optparse import OptionParser
 
 
-# --- variables and constants ---------------------------------------
+# --- variables and constants -----------------------------------------------
 style = """
 <style>
 body {
