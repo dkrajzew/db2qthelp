@@ -27,7 +27,6 @@ import argparse
 import configparser
 import io
 import tempfile
-import glob
 from typing import List
 
 
@@ -100,7 +99,7 @@ QCHP = """<?xml version="1.0" encoding="UTF-8"?>
 class Db2QtHelp:
     def __init__(self, qt_path : str, xslt_path : str, source : str, url : str, src_folder : List[str], dst_folder : str, app_name : str, template : str):
         """Contructor
-    
+
         Args:
             qt_path (str): Path to the Qt binaries
             source (str): Path to the docbook/html source to process
@@ -120,30 +119,30 @@ class Db2QtHelp:
         self._template = template
         self._toc = ""
         self._keywords = ""
-            
-            
-    def get_id(self, html : str) -> str:
-        """Return the ID of the current section.
-    
-        The value of the first a-element's name attribute is assumed to be the ID.
-    
+
+
+    def _get_id(self, html : str) -> str:
+        """Return the docbook ID of the current section.
+
+        The value of the first a-element's name attribute is assumed to be the docbook ID.
+
         Args:
-            html (str): The HTML snippet to get the next ID from
-    
+            html (str): The HTML snippet to get the next docbook ID from
+
         Returns:
             (str): The next ID found in the snippet
         """
-        id = html[html.find("<a name=\"")+9:]
-        id = id[:id.find("\"")]
-        return id
-    
-    
-    def get_name(self, html : str) -> str:
+        db_id = html[html.find("<a name=\"")+9:]
+        db_id = db_id[:db_id.find("\"")]
+        return db_id
+
+
+    def _get_name(self, html : str) -> str:
         """Return the name of the current section.
-    
+
         Args:
             html (str): The HTML snippet to get the next name from
-    
+
         Returns:
             (str): The next name found in the snippet
         """
@@ -152,14 +151,14 @@ class Db2QtHelp:
         name = name.replace("\"", "'")
         name = name.strip()
         return name
-    
-    
+
+
     def _get_title(self, html : str) -> str:
         """Return the name of the current section.
-    
+
         Args:
             html (str): The HTML snippet to get the next name from
-    
+
         Returns:
             (str): The next name found in the snippet
         """
@@ -168,42 +167,40 @@ class Db2QtHelp:
         name = name.replace("\"", "'")
         name = name.strip()
         return name
-    
+
 
     def _write_sections_recursive(self, c : str, fdo_content : io.TextIOWrapper, level : int) -> None:
         """Writes the given section and it's sub-sections recursively.
-    
+
         The id and the name of the section are retrieved, first.
-    
+
         Then, the toc HTML file is extended and the reference to this section is
         appended to the returned toc. Keywords are extended by the section's name.
-    
+
         The section is then split along the
         '&lt;div class="sect&lt;INDENT&gt;"&gt;' elements which are processed
         recursively.
-    
+
         The (recursively) collected keywords and toc are returned.
-    
+
         Args:
             c (str): The (string) content of the DocBook book section or appendix
             fdo_content (file): The content output file
             level (int): intendation level
         """
-        id = self.get_id(c)
-        if id=="user":
-            id = "index" # @todo: check!
-        name = self.get_name(c)
+        db_id = self._get_id(c)
+        name = self._get_name(c)
         indent = " "*(level*3)
-        fdo_content.write(indent + f"<li><a href=\"{id}.html\">{name}</a></li>\n")
-        self._toc += indent + f"<section title=\"{name}\" ref=\"{id}.html\">\n"
-        self._keywords += f"   <keyword name=\"{name}\" ref=\"./{id}.html\"/>\n"
+        fdo_content.write(indent + f"<li><a href=\"{db_id}.html\">{name}</a></li>\n")
+        self._toc += indent + f"<section title=\"{name}\" ref=\"{db_id}.html\">\n"
+        self._keywords += f"   <keyword name=\"{name}\" ref=\"./{db_id}.html\"/>\n"
         """
-        #if level>3:
-        #    fdo = open("qtdoc/%s.html" % id, "w")
-        #    fdo.write(c)
-        #    fdo.close()
-        #    toc += indent + "</section>\n"
-        #    return toc
+        if level>3:
+            fdo = open("qtdoc/%s.html" % db_id, "w")
+            fdo.write(c)
+            fdo.close()
+            toc += indent + "</section>\n"
+            return toc
         """
         subs = c.split(f"<div class=\"sect{level}\">")
         if subs[0].rfind("</div>")>=len(subs[0])-6:
@@ -213,7 +210,7 @@ class Db2QtHelp:
         subs[0] = re.sub(r'<a href="#([^"]*)">([^<]*)</a>', r'<a href="\1.html">\2</a>', subs[0])
         subs[0] = re.sub(r'<a class="ulink" href="#([^"]*)">([^<]*)</a>', r'<a class="ulink" href="\1.html">\2</a>', subs[0])
         subs[0] = "<html><head>" + STYLE + "</head><body>" + subs[0] + "</body></html>"
-        with open(self._dst_folder + f"/{id}.html", "w") as fdo:
+        with open(self._dst_folder + f"/{db_id}.html", "w", encoding="utf-8") as fdo:
             fdo.write(subs[0])
         if len(subs)>1:
             fdo_content.write(indent + "<ul>\n")
@@ -226,14 +223,15 @@ class Db2QtHelp:
                 self._write_sections_recursive(sub, fdo_content, level+1)
             fdo_content.write(indent + "</ul>\n")
         self._toc += indent + "</section>\n"
-    
-        
-    def _process_single(self):
+
+
+    def _process_single(self) -> None:
+        """Processes a single (not chunked) HTML document generated by docbook"""
         # read doc
         with open(self._source) as fdi:
             doc = fdi.read()
         # process document
-        with open(f"{self._dst_folder}/toc.html", "w") as fdo_content:
+        with open(f"{self._dst_folder}/toc.html", "w", encoding="utf-8") as fdo_content:
             fdo_content.write("<html><head>" + STYLE + "</head><body>\n")
             chapters = doc.split("<div class=\"chapter\">")
             appendices = chapters[-1].split('<div class="appendix">')
@@ -242,19 +240,30 @@ class Db2QtHelp:
             for c in chapters:
                 self._write_sections_recursive(c, fdo_content, 1)
             fdo_content.write("</body></html>\n")
-        
-    def _generate_html(self, folder):
+
+
+    def _generate_html(self, folder : str) -> None:
+        """Generates a chunked HTML document from the source docbook document
+
+        Args:
+            folder (str): A (temporary) folder to store the xsltproc output to
+        """
         shutil.rmtree(folder, ignore_errors=True)
         print(f"{os.path.join(self._xslt_path, 'xsltproc')} --stringparam base.dir {folder} chunk_html.xsl {self._source}")
         os.system(f"{os.path.join(self._xslt_path, 'xsltproc')} --stringparam base.dir {folder} chunk_html.xsl {self._source}")
-        
-    
-    def _process_chunked(self, folder):
+
+
+    def _process_chunked(self, folder : str) -> None:
+        """Processes a the set of HTML documents generated by chunking docbook
+
+        Args:
+            folder (str): A (temporary) folder to store the xsltproc output to
+        """
         # collect entries
         entries = []
         max_depth = 0
         for file in glob.glob(os.path.join(folder, "*.html")):
-            filepath, filename = os.path.split(file)
+            _, filename = os.path.split(file)
             if filename=="index.html":
                 continue
             with open(file) as fd:
@@ -263,21 +272,22 @@ class Db2QtHelp:
             #print(f"'{title.split()[0]}'")
             #print(f"'{title.split()[0].split('.')}'")
             #print(f"'{title.split()[0].split('.')[:-1]}'")
-            chapter = title.split()[0].split(".")[:-1]
+            tchapter = title.split()[0].split(".")[:-1]
             #print(chapter)
-            chapter = [int(x) for x in chapter]
+            chapter = [int(x) for x in tchapter]
             #print(chapter)
             max_depth = max(len(chapter), max_depth)
             entries.append([filename, title, chapter])
         # sort entries
-        def expandChapter(ch, depth):
+        # https://stackoverflow.com/questions/14861843/sorting-chapters-numbers-like-1-2-1-or-1-4-2-4
+        def expand_chapter(ch, depth):
             ch = ch + [0,] * (depth - len(ch))
             return ch
-        entries.sort(key = lambda x: expandChapter(x[2], max_depth))
+        entries.sort(key = lambda x: expand_chapter(x[2], max_depth))
         #for e in entries:
         #    print(e)
         level = 0
-        for ie,e in enumerate(entries):
+        for e in entries:
             filename = e[0]
             title = e[1]
             nlevel = len(e[2])
@@ -291,9 +301,10 @@ class Db2QtHelp:
             self._keywords += f"   <keyword name=\"{title}\" ref=\"./{filename}\"/>\n"
         indent = " "*(level*3)
         self._toc += indent + "</section>\n"
-        
-        
-    def process(self):
+
+
+    def process(self) -> None:
+        """Performs the conversion"""
         # clear output folder
         #shutil.rmtree(self._dst_folder, ignore_errors=True)
         os.makedirs(self._dst_folder, exist_ok=True)
@@ -304,7 +315,7 @@ class Db2QtHelp:
             for f in files:
                 _, n = os.path.split(f)
                 shutil.copy(f, f"{self._dst_folder}/{n}")
-        # process 
+        # process
         if os.path.isdir(self._source):
             print(f"Processing chunked HTML output from '{self._source}'")
             self._process_chunked(self._source)
@@ -325,10 +336,10 @@ class Db2QtHelp:
             raise ValueError(f"unknown file '{self._source}'")
         # read template, write extended by collected data
         path = f"{self._dst_folder}/{self._app_name}"
-        with open(path + ".qhp", "w") as fdo:
+        with open(path + ".qhp", "w", encoding="utf-8") as fdo:
             fdo.write(self._template.replace("%toc%", self._toc).replace("%keywords%", self._keywords).replace("%source%", self._url).replace("%appname%", self._app_name))
         # generate qhcp
-        with open(path + ".qhcp", "w") as fdo:
+        with open(path + ".qhcp", "w", encoding="utf-8") as fdo:
             fdo.write(QCHP.replace("%appname%", self._app_name))
         # generate QtHelp
         os.system(f"{self._qt_path}/qhelpgenerator {path}.qhp -o {path}.qch")
@@ -432,7 +443,7 @@ def main(arguments : List[str] = None) -> int:
     args = parser.parse_args(remaining_argv)
     # - generate the template and quit, if wished
     if args.generate:
-        with open(args.template, "w") as fdo:
+        with open(args.template, "w", encoding="utf-8") as fdo:
             fdo.write(TEMPLATE)
         print (f"Written qhp template to '{args.template}'")
         sys.exit(0)
@@ -459,7 +470,6 @@ def main(arguments : List[str] = None) -> int:
     # get settings
     with open(args.template) as fdi:
         template = fdi.read()
-    app_name = args.appname
     src_folder = [v.replace("\\", "/") for v in args.files.split(",")]
     src_folder.sort(key=lambda t: len(t), reverse=True)
     # process

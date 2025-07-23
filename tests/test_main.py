@@ -85,7 +85,6 @@ options:
     assert captured.err == ""
 
 
-
 def test_main_generate_tpl__short(capsys, tmp_path):
     """Generates a template using the short option"""
     p1 = tmp_path / "test.qhp"
