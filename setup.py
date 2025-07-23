@@ -1,22 +1,27 @@
-# ===================================================================
-# db2qthelp - a DocBook book to QtHelp project converter.
-#
-# Setup module
-#
-# (c) Daniel Krajzewicz 2022-2023
-# daniel@krajzewicz.de
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""db2qthelp - Setup module."""
+# ===========================================================================
+__author__     = "Daniel Krajzewicz"
+__copyright__  = "Copyright 2022-2025, Daniel Krajzewicz"
+__credits__    = ["Daniel Krajzewicz"]
+__license__    = "BSD"
+__version__    = "0.4"
+__maintainer__ = "Daniel Krajzewicz"
+__email__      = "daniel@krajzewicz.de"
+__status__     = "Development"
+# ===========================================================================
 # - https://github.com/dkrajzew/db2qthelp
 # - http://www.krajzewicz.de/docs/db2qthelp/index.html
 # - http://www.krajzewicz.de
-# 
-# Available under the BSD license.
-# ===================================================================
+# ===========================================================================
 
-# --- imports -------------------------------------------------------
+
+# --- imports ---------------------------------------------------------------
 import setuptools
 
 
-# --- definitions ---------------------------------------------------
+# --- definitions -----------------------------------------------------------
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
@@ -37,11 +42,11 @@ setuptools.setup(
         'Discussions': 'https://github.com/dkrajzew/db2qthelp/discussions',
     },
     license='BSD',
-    # add modules
-    py_modules = ['db2qthelp'],
+    packages = [""],
+    package_dir = { "": "db2qthelp" },
     entry_points = {
         'console_scripts': [
-            'db2qthelp = db2qthelp:main'
+            'db2qthelp = db2qthelp:script_run'
         ]
     },
     # see https://pypi.org/classifiers/
@@ -60,6 +65,6 @@ setuptools.setup(
         "Topic :: Text Processing :: Filters",
         "Topic :: Utilities"
     ],
-    python_requires='>=2.7, <4',
+    python_requires='>=3, <4',
 )
 
