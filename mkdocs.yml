@@ -1,34 +1,43 @@
 site_name: db2qthelp
 site_url: https://github.com/dkrajzew/db2qthelp
-site_description: A web type setter
+site_description: A docbbok to Qt help converter
 site_author: Daniel Krajzewicz
-docs_dir: ./mkdocs
+docs_dir: ./docs
 
-repo_url: https://github.com/dkrajzew/db2qthelp.git
+repo_url: https://github.com/dkrajzew/db2qthelp
 edit_uri: ""
 
 theme:
-    name: readthedocs
-    highlightjs: true
-    hljs_languages:
-        - yaml
+    name: material
+    custom_dir: ./docs/materials_ext
+    font: false
+    palette:
+        primary: light green
+
+extra_css:
+    - stylesheets/extra.css
+    - stylesheets/prism.css
+
+extra_javascript:
+    - js/prism.js
 
 nav:
     - Home: index.md
     - Installation: install.md
     - Usage: cmd.md
+    - Links: links.md
+    - API: api.md
     - ChangeLog: changes.md
     - License (BSD): license.md
     - Legal: legal.md
-    - API: api.md
-    - Developer Docs:
-        - How To Release: release.md
+
+exclude_docs:
 
 markdown_extensions:
     - admonition
     - sane_lists
   
-copyright: "&copy; Copyright 2022&ndash;2023 Daniel Krajzewicz."
+copyright: "&copy; Copyright 2022&ndash;2025 Daniel Krajzewicz."
 
 use_directory_urls: false
 
@@ -37,7 +46,7 @@ plugins:
     - mkdocstrings:
         handlers:
             python:
-                paths: [..]
+                paths: [./db2qthelp]
                 options:
                     filters: [""]
                     show_source: False

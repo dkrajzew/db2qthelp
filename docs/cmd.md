@@ -1,11 +1,9 @@
-Running on the Command Line
-===========================
+# Running on the Command Line
 
 __db2qthelp__ is implemented in [Python](https://www.python.org/). It is started on the command line.
 
 
-Description
------------
+## Description
 
 __db2qthelp__ requires some prerequisites. In the following, the steps for a QtHelp from a DocBook book are described.
 
@@ -93,8 +91,8 @@ The built documentation can be found in the destination folder. You need two fil
 * &lt;APPLICATION_NAME&gt;.qch
 * &lt;APPLICATION_NAME&gt;.qhc
 
-Options
--------
+
+## Options
 
 The script has the following options:
 
@@ -109,8 +107,7 @@ The script has the following options:
 * __--help__: Prints the help screen
 
 
-Explanation
------------
+## Explanation
 
 __db2qthelp__ copies *.png and *.gif-files from the folders defined using --files, first.
 
@@ -128,10 +125,7 @@ Finally, the script calls two QtHelp processing applications which must be locat
 ```
 
 
-
-
-Examples
---------
+## Examples
 
 ```console
 db2qthelp --generate
