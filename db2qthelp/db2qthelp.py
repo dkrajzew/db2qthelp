@@ -23,11 +23,16 @@ import sys
 import shutil
 import glob
 import re
-from optparse import OptionParser
+import argparse
+import configparser
+import io
+import tempfile
+import glob
+from typing import List
 
 
 # --- variables and constants -----------------------------------------------
-style = """
+STYLE = """
 <style>
 body {
  margin: 0;
@@ -54,7 +59,7 @@ div.informalequation { text-align: center; font-style: italic; }
 </style>
 """
 
-template = """<?xml version="1.0" encoding="latin1"?>
+TEMPLATE = """<?xml version="1.0" encoding="latin1"?>
 <QtHelpProject version="1.0">
     <namespace>%source%</namespace>
     <virtualFolder>doc</virtualFolder>
@@ -75,7 +80,7 @@ template = """<?xml version="1.0" encoding="latin1"?>
 </QtHelpProject>
 """
 
-qhcp = """<?xml version="1.0" encoding="UTF-8"?>
+QCHP = """<?xml version="1.0" encoding="UTF-8"?>
 <QHelpCollectionProject version="1.0">
     <docFiles>
         <generate>
@@ -91,145 +96,246 @@ qhcp = """<?xml version="1.0" encoding="UTF-8"?>
 </QHelpCollectionProject>
 """
 
+# --- functions -------------------------------------------------------------
+class Db2QtHelp:
+    def __init__(self, qt_path : str, xslt_path : str, source : str, url : str, src_folder : List[str], dst_folder : str, app_name : str, template : str):
+        """Contructor
+    
+        Args:
+            qt_path (str): Path to the Qt binaries
+            source (str): Path to the docbook/html source to process
+            url (str): The url of the documentation
+            src_folder (List[str]): The source folder(s) (where images are located)
+            dst_folder (str): The destination folder (where the documentation is built)
+            app_name (str): The name of the application
+            template (str): The qhp template to use
+        """
+        self._qt_path = qt_path
+        self._xslt_path = xslt_path
+        self._source = source
+        self._url = url
+        self._src_folder = src_folder
+        self._dst_folder = dst_folder
+        self._app_name = app_name
+        self._template = template
+        self._toc = ""
+        self._keywords = ""
+            
+            
+    def get_id(self, html : str) -> str:
+        """Return the ID of the current section.
+    
+        The value of the first a-element's name attribute is assumed to be the ID.
+    
+        Args:
+            html (str): The HTML snippet to get the next ID from
+    
+        Returns:
+            (str): The next ID found in the snippet
+        """
+        id = html[html.find("<a name=\"")+9:]
+        id = id[:id.find("\"")]
+        return id
+    
+    
+    def get_name(self, html : str) -> str:
+        """Return the name of the current section.
+    
+        Args:
+            html (str): The HTML snippet to get the next name from
+    
+        Returns:
+            (str): The next name found in the snippet
+        """
+        name = html[html.find("</a>")+4:]
+        name = name[:name.find("</h")]
+        name = name.replace("\"", "'")
+        name = name.strip()
+        return name
+    
+    
+    def _get_title(self, html : str) -> str:
+        """Return the name of the current section.
+    
+        Args:
+            html (str): The HTML snippet to get the next name from
+    
+        Returns:
+            (str): The next name found in the snippet
+        """
+        name = html[html.find("<title>")+7:]
+        name = name[:name.find("</title>")]
+        name = name.replace("\"", "'")
+        name = name.strip()
+        return name
+    
 
-# --- methods -------------------------------------------------------
-def getID(html):
-    """Returns the ID of the current section.
-
-    The value of the first a-element's name attribute is assumed to be the ID.
-
-    Args:
-        html (str): The HTML snippet to get the next ID from
-
-    Returns:
-        (str): The next ID found in the snippet
-    """
-    id = html[html.find("<a name=\"")+9:]
-    id = id[:id.find("\"")]
-    return id
-
-
-def getName(html):
-    """Returns the name of the current section.
-
-    Args:
-        html (str): The HTML snippet to get the next name from
-
-    Returns:
-        (str): The next name found in the snippet
-    """
-    name = html[html.find("</a>")+4:]
-    name = name[:name.find("</h")]
-    name = name.replace("\"", "'")
-    name = name.strip()
-    return name
-
-
-def writeSectionsRecursive(c, srcFolder, destFolder, sourceURL, fdo_content, level):
-    """Writes the given section and it's sub-sections recursively.
-
-    The id and the name of the section are retrieved, first.
-
-    Then, the toc HTML file is extended and the reference to this section is
-    appended to the returned toc. Keywords are extended by the section's name.
-
-    The section is then split along the
-    '&lt;div class="sect&lt;INDENT&gt;"&gt;' elements which are processed
-    recursively.
-
-    The (recursively) collected keywords and toc are returned.
-
-    Args:
-        c (str): The (string) content of the DocBook book section or appendix
-        srcFolder (List[str]): The source folder(s) (where images are located)
-        destFolder (str): The destination folder (where the documentation is built)
-        sourceURL (str): The URL of the built QtHelp pages
-        fdo_content (file): The content output file
-        level (int): intendation level
-
-    Returns:
-        Tuple[str, str]: The table of content and the collected keywords
-
-    """
-    global style
-    id = getID(c)
-    if id=="user":
-        id = "index" # @todo: check!
-    name = getName(c)
-    indent = " "*(level*3)
-    fdo_content.write(indent + "<li><a href=\"%s.html\">%s</a></li>\n" % (id, name))
-    toc = indent + "<section title=\"%s\" ref=\"%s.html\">\n" % (name, id)
-    keywords = "   <keyword name=\"%s\" ref=\"./%s.html\"/>\n" %  (name, id)
-    """
-    #if level>3:
-    #    fdo = open("qtdoc/%s.html" % id, "w")
-    #    fdo.write(c)
-    #    fdo.close()
-    #    toc += indent + "</section>\n"
-    #    return toc
-    """
-    subs = c.split("<div class=\"sect%s\">" % level)
-    if subs[0].rfind("</div>")>=len(subs[0])-6:
-        subs[0] = subs[0][:subs[0].rfind("</div>")]
-    for s in srcFolder:
-        subs[0] = subs[0].replace("src=\"%s/" % s, "src=\"qthelp://%s/doc/" % sourceURL)
-    subs[0] = re.sub(r'<a href="#([^"]*)">([^<]*)</a>', r'<a href="\1.html">\2</a>', subs[0])
-    subs[0] = re.sub(r'<a class="ulink" href="#([^"]*)">([^<]*)</a>', r'<a class="ulink" href="\1.html">\2</a>', subs[0])
-    subs[0] = "<html><head>" + style + "</head><body>" + subs[0] + "</body></html>"
-    fdo = open(destFolder + "/%s.html" % id, "w")
-    fdo.write(subs[0])
-    fdo.close()
-    if len(subs)>1:
-        fdo_content.write(indent + "<ul>\n")
-        for i,sub in enumerate(subs):
-            if i==0:
+    def _write_sections_recursive(self, c : str, fdo_content : io.TextIOWrapper, level : int) -> None:
+        """Writes the given section and it's sub-sections recursively.
+    
+        The id and the name of the section are retrieved, first.
+    
+        Then, the toc HTML file is extended and the reference to this section is
+        appended to the returned toc. Keywords are extended by the section's name.
+    
+        The section is then split along the
+        '&lt;div class="sect&lt;INDENT&gt;"&gt;' elements which are processed
+        recursively.
+    
+        The (recursively) collected keywords and toc are returned.
+    
+        Args:
+            c (str): The (string) content of the DocBook book section or appendix
+            fdo_content (file): The content output file
+            level (int): intendation level
+        """
+        id = self.get_id(c)
+        if id=="user":
+            id = "index" # @todo: check!
+        name = self.get_name(c)
+        indent = " "*(level*3)
+        fdo_content.write(indent + f"<li><a href=\"{id}.html\">{name}</a></li>\n")
+        self._toc += indent + f"<section title=\"{name}\" ref=\"{id}.html\">\n"
+        self._keywords += f"   <keyword name=\"{name}\" ref=\"./{id}.html\"/>\n"
+        """
+        #if level>3:
+        #    fdo = open("qtdoc/%s.html" % id, "w")
+        #    fdo.write(c)
+        #    fdo.close()
+        #    toc += indent + "</section>\n"
+        #    return toc
+        """
+        subs = c.split(f"<div class=\"sect{level}\">")
+        if subs[0].rfind("</div>")>=len(subs[0])-6:
+            subs[0] = subs[0][:subs[0].rfind("</div>")]
+        for s in self._src_folder:
+            subs[0] = subs[0].replace(f"src=\"{s}/", f"src=\"qthelp://{self._url}/doc/")
+        subs[0] = re.sub(r'<a href="#([^"]*)">([^<]*)</a>', r'<a href="\1.html">\2</a>', subs[0])
+        subs[0] = re.sub(r'<a class="ulink" href="#([^"]*)">([^<]*)</a>', r'<a class="ulink" href="\1.html">\2</a>', subs[0])
+        subs[0] = "<html><head>" + STYLE + "</head><body>" + subs[0] + "</body></html>"
+        with open(self._dst_folder + f"/{id}.html", "w") as fdo:
+            fdo.write(subs[0])
+        if len(subs)>1:
+            fdo_content.write(indent + "<ul>\n")
+            for i,sub in enumerate(subs):
+                if i==0:
+                    continue
+                sub = sub[:sub.rfind("</div>")]
+                for s in self._src_folder:
+                    sub = sub.replace(f"src=\"{s}/", f"src=\"qthelp://{self._url}/doc/")
+                self._write_sections_recursive(sub, fdo_content, level+1)
+            fdo_content.write(indent + "</ul>\n")
+        self._toc += indent + "</section>\n"
+    
+        
+    def _process_single(self):
+        # read doc
+        with open(self._source) as fdi:
+            doc = fdi.read()
+        # process document
+        with open(f"{self._dst_folder}/toc.html", "w") as fdo_content:
+            fdo_content.write("<html><head>" + STYLE + "</head><body>\n")
+            chapters = doc.split("<div class=\"chapter\">")
+            appendices = chapters[-1].split('<div class="appendix">')
+            chapters = chapters[:-1]
+            chapters.extend(appendices)
+            for c in chapters:
+                self._write_sections_recursive(c, fdo_content, 1)
+            fdo_content.write("</body></html>\n")
+        
+    def _generate_html(self, folder):
+        shutil.rmtree(folder, ignore_errors=True)
+        print(f"{os.path.join(self._xslt_path, 'xsltproc')} --stringparam base.dir {folder} chunk_html.xsl {self._source}")
+        os.system(f"{os.path.join(self._xslt_path, 'xsltproc')} --stringparam base.dir {folder} chunk_html.xsl {self._source}")
+        
+    
+    def _process_chunked(self, folder):
+        # collect entries
+        entries = []
+        max_depth = 0
+        for file in glob.glob(os.path.join(folder, "*.html")):
+            filepath, filename = os.path.split(file)
+            if filename=="index.html":
                 continue
-            sub = sub[:sub.rfind("</div>")]
-            for s in srcFolder:
-                sub = sub.replace("src=\"%s/" % s, "src=\"qthelp://%s/doc/" % sourceURL)
-            tocA, keysA = writeSectionsRecursive(sub, srcFolder, destFolder, sourceURL, fdo_content, level+1)
-            toc += tocA
-            keywords += keysA
-        fdo_content.write(indent + "</ul>\n")
-    toc += indent + "</section>\n"
-    return toc, keywords
+            with open(file) as fd:
+                html = fd.read()
+            title = self._get_title(html)
+            #print(f"'{title.split()[0]}'")
+            #print(f"'{title.split()[0].split('.')}'")
+            #print(f"'{title.split()[0].split('.')[:-1]}'")
+            chapter = title.split()[0].split(".")[:-1]
+            #print(chapter)
+            chapter = [int(x) for x in chapter]
+            #print(chapter)
+            max_depth = max(len(chapter), max_depth)
+            entries.append([filename, title, chapter])
+        # sort entries
+        def expandChapter(ch, depth):
+            ch = ch + [0,] * (depth - len(ch))
+            return ch
+        entries.sort(key = lambda x: expandChapter(x[2], max_depth))
+        #for e in entries:
+        #    print(e)
+        level = 0
+        for ie,e in enumerate(entries):
+            filename = e[0]
+            title = e[1]
+            nlevel = len(e[2])
+            while nlevel<=level:
+                indent = " "*(level*3)
+                self._toc += indent + "</section>\n"
+                level -= 1
+            level = nlevel
+            indent = " "*(level*3)
+            self._toc += indent + f"<section title=\"{title}\" ref=\"{filename}\">\n"
+            self._keywords += f"   <keyword name=\"{title}\" ref=\"./{filename}\"/>\n"
+        indent = " "*(level*3)
+        self._toc += indent + "</section>\n"
+        
+        
+    def process(self):
+        # clear output folder
+        #shutil.rmtree(self._dst_folder, ignore_errors=True)
+        os.makedirs(self._dst_folder, exist_ok=True)
+        # copy images etc.
+        for s in self._src_folder:
+            files = glob.glob(os.path.join(s, "*.png"))
+            files.extend(glob.glob(os.path.join(s, "*.gif")))
+            for f in files:
+                _, n = os.path.split(f)
+                shutil.copy(f, f"{self._dst_folder}/{n}")
+        # process 
+        if os.path.isdir(self._source):
+            print(f"Processing chunked HTML output from '{self._source}'")
+            self._process_chunked(self._source)
+        elif os.path.isfile(self._source):
+            if self._source.endswith(".html"):
+                print(f"Processing single HTML output from '{self._source}'")
+                self._process_single()
+            elif self._source.endswith(".xml"):
+                print(f"Processing docboook '{self._source}'")
+                tmp_dir = "tst1" # tempfile.TemporaryDirectory()
+                print("... generating chunked HTML")
+                self._generate_html(tmp_dir)
+                print("... processing chunked HTML")
+                self._process_chunked(tmp_dir)
+            else:
+                raise ValueError(f"unsupported file extension of '{self._source}'")
+        else:
+            raise ValueError(f"unknown file '{self._source}'")
+        # read template, write extended by collected data
+        path = f"{self._dst_folder}/{self._app_name}"
+        with open(path + ".qhp", "w") as fdo:
+            fdo.write(self._template.replace("%toc%", self._toc).replace("%keywords%", self._keywords).replace("%source%", self._url).replace("%appname%", self._app_name))
+        # generate qhcp
+        with open(path + ".qhcp", "w") as fdo:
+            fdo.write(QCHP.replace("%appname%", self._app_name))
+        # generate QtHelp
+        os.system(f"{self._qt_path}/qhelpgenerator {path}.qhp -o {path}.qch")
+        os.system(f"{self._qt_path}/qcollectiongenerator {path}.qhcp -o {path}.qhc")
 
 
-def _makeClean(destFolder):
-    """ Deletes previously collected and built files.
-
-    Deletes all .html, .png, and .gif files within the destination folder.
-
-    Args:
-        destFolder (str): The destination folder (where the documentation is built)
-    """
-    # delete previous files
-    files = glob.glob(destFolder + "/*.html")
-    files.extend(glob.glob(destFolder + "/*.png"))
-    files.extend(glob.glob(destFolder + "/*.gif"))
-    for f in files:
-        os.remove(f)
-
-
-def _copyFiles(srcFolder, destFolder):
-    """Collects images to include in the documenatation.
-
-    Copies them from the source to the destination folder.
-
-    Args:
-        srcFolder (str): The source folder(s) (where images are located)
-        destFolder (str): The destination folder (where the documentation is built)
-    """
-    # copy new files
-    for s in srcFolder:
-        files = glob.glob(os.path.join(s, "*.png"))
-        files.extend(glob.glob(os.path.join(s, "*.gif")))
-        for f in files:
-            p, n = os.path.split(f)
-            shutil.copy(f, destFolder + "/" + n)
-
-
-def main(arguments=None):
+def main(arguments : List[str] = None) -> int:
     """The main method using parameter from the command line.
 
     The application deletes previously collected and build .html, .png, and
@@ -296,87 +402,77 @@ def main(arguments=None):
     --help:
         Prints the help screen
     """
-    #sys.tracebacklimit = 0
     # parse options
-    optParser = OptionParser(usage="usage:\n  db2qthelp.py [options]", version="db2qthelp.py 0.4")
-    optParser.add_option("-i", "--input", type="string", dest="input", default=None, help="Defines the DocBook HTML document to parse")
-    optParser.add_option("-a", "--appname", type="string", dest="appname", default=None, help="Sets the name of the application")
-    optParser.add_option("-s", "--source", type="string", dest="source", default=None, help="Sets the documentation source url")
-    optParser.add_option("-f", "--files", type="string", dest="files", default="user_images", help="Sets the folder to collect files from")
-    optParser.add_option("-d", "--destination", type="string", dest="destination", default="qtdoc", help="Sets the output folder")
-    optParser.add_option("-t", "--template", type="string", dest="template", default="template.qhp", help="Defines the QtHelp project template to use")
-    optParser.add_option("-g", "--generate", dest="generate", action="store_true", default=False, help="If set, a template is generated")
-    optParser.add_option("-p", "--path", type="string", dest="path", default="", help="Sets the path to the Qt binaries to use")
-    options, remaining_args = optParser.parse_args(args=arguments)
+    # https://stackoverflow.com/questions/3609852/which-is-the-best-way-to-allow-configuration-options-be-overridden-at-the-comman
+    defaults = {}
+    conf_parser = argparse.ArgumentParser(prog='db2qthelp', add_help=False)
+    conf_parser.add_argument("-c", "--config", metavar="FILE", help="Reads the named configuration file")
+    args, remaining_argv = conf_parser.parse_known_args(arguments)
+    if args.config is not None:
+        if not os.path.exists(args.config):
+            print (f"db2qthelp: error: configuration file '{str(args.config)}' does not exist", file=sys.stderr)
+            raise SystemExit(2)
+        config = configparser.ConfigParser()
+        config.read([args.config])
+        defaults.update(dict(config.items("db2qthelp")))
+    parser = argparse.ArgumentParser(prog='db2qthelp', parents=[conf_parser],
+        description="a DocBook book to QtHelp project converter",
+        epilog='(c) Daniel Krajzewicz 2022-2025')
+    parser.add_argument("-i", "--input", dest="input", default=None, help="Defines the DocBook HTML document to parse")
+    parser.add_argument("-a", "--appname", dest="appname", default=None, help="Sets the name of the application")
+    parser.add_argument("-s", "--source", dest="source", default=None, help="Sets the documentation source url")
+    parser.add_argument("-f", "--files", dest="files", default="user_images", help="Sets the folder to collect files from")
+    parser.add_argument("-d", "--destination", dest="destination", default="qtdoc", help="Sets the output folder")
+    parser.add_argument("-t", "--template", dest="template", default="template.qhp", help="Defines the QtHelp project template to use")
+    parser.add_argument("-g", "--generate", dest="generate", action="store_true", default=False, help="If set, a template is generated")
+    parser.add_argument("-q", "--qt-path", dest="qt_path", default="", help="Sets the path to the Qt binaries")
+    parser.add_argument("-x", "--xslt-path", dest="xslt_path", default="", help="Sets the path to xsltproc")
+    parser.add_argument('--version', action='version', version='%(prog)s 0.2.0')
+    parser.set_defaults(**defaults)
+    args = parser.parse_args(remaining_argv)
     # - generate the template and quit, if wished
-    if options.generate:
-        with open(options.template, "w") as fdo:
-            global template
-            fdo.write(template)
-        print ("Written qhp template to '%s'" % options.template)
+    if args.generate:
+        with open(args.template, "w") as fdo:
+            fdo.write(TEMPLATE)
+        print (f"Written qhp template to '{args.template}'")
         sys.exit(0)
-    # - build documentation
-    # check options
-    ret = 0
-    if options.input is None:
-        print("Error: no input file given (use -i <HTML_DOCBOOK>)...", file=sys.stderr)
-        ret = 2
-    if options.appname is None:
-        print("Error: no application name given (use -a <APP_NAME>)...", file=sys.stderr)
-        ret = 2
-    if options.source is None:
-        print("Error: no source url given(use -s <SOURCE_URL>)...", file=sys.stderr)
-        ret = 2
-    if ret!=0:
-        print("Usage: db2qthelp.py -i <HTML_DOCBOOK> [options]+", file=sys.stderr)
-        sys.exit(2)
+    # check
+    errors = []
+    if args.input is None:
+        errors.append("no input file given (use -i <HTML_DOCBOOK>)...")
+    elif os.path.isfile(args.input) and (not args.input.endswith(".html") and not args.input.endswith(".xml")):
+        errors.append("unrecognized input extension '{os.path.splitext(args.input)[1]}'")
+    elif not os.path.exists(args.input):
+        errors.append("did not find input '{args.input}'")
+    if not os.path.exists(args.template):
+        errors.append(f"did not find template file '{args.template}'; you may generate one using the option -g")
+    if args.appname is None:
+        errors.append("no application name given (use -a <APP_NAME>)...")
+    if args.source is None:
+        errors.append("no source url given (use -s <SOURCE_URL>)...")
+    if args.qt_path is None:
+        errors.append("no path to Qt binaries given (use -p <QT_PATH>)...")
+    if len(errors)!=0:
+        for e in errors:
+            print(f"db2qthelp: error: {e}", file=sys.stderr)
+        raise SystemExit(2)
     # get settings
-    appName = options.appname
-    srcFolder = [v.replace("\\", "/") for v in options.files.split(",")]
-    srcFolder.sort(key=lambda t: len(t), reverse=True)
-    sourceURL = options.source
-    destFolder = options.destination
-    if not os.path.exists(destFolder):
-        os.mkdir(destFolder)
-    tocFileName = destFolder + "/toc.html"
-    qtPath = options.path
-    # delete previous files
-    _makeClean(destFolder)
-    # copy images
-    _copyFiles(srcFolder, destFolder)
-    # read doc
-    with open(options.input) as fdi:
-        doc = fdi.read()
-    # process document
-    toc = ""
-    keywords = ""
-    fdo_content = open(tocFileName, "w")
-    fdo_content.write("<html><head>" + style + "</head><body>\n")
-    chapters = doc.split("<div class=\"chapter\">")
-    appendices = chapters[-1].split('<div class="appendix">')
-    chapters = chapters[:-1]
-    chapters.extend(appendices)
-    for c in chapters:
-        tocA, keysA = writeSectionsRecursive(c, srcFolder, destFolder, sourceURL, fdo_content, 1)
-        toc += tocA
-        keywords += keysA
-    fdo_content.write("</body></html>\n")
-    fdo_content.close()
-    # read template, write extended by collected data
-    with open(options.template) as fdi:
+    with open(args.template) as fdi:
         template = fdi.read()
-    path = destFolder + "/" + appName
-    with open(path + ".qhp", "w") as fdo:
-        fdo.write(template.replace("%toc%", toc).replace("%keywords%", keywords).replace("%source%", sourceURL).replace("%appname%", appName))
-    # generate qhcp
-    with open(path + ".qhcp", "w") as fdo:
-        global qhcp
-        fdo.write(qhcp.replace("%appname%", appName))
-    # generate QtHelp
-    os.system("%s/qhelpgenerator %s.qhp -o %s.qch" % (qtPath, path, path))
-    os.system("%s/qcollectiongenerator %s.qhcp -o %s.qhc" % (qtPath, path, path))
+    app_name = args.appname
+    src_folder = [v.replace("\\", "/") for v in args.files.split(",")]
+    src_folder.sort(key=lambda t: len(t), reverse=True)
+    # process
+    db2qthelp = Db2QtHelp(args.qt_path, args.xslt_path, args.input, args.source, src_folder, args.destination, args.appname, template)
+    db2qthelp.process()
+    return 0
+
+
+def script_run() -> int:
+    """Execute from command line."""
+    sys.exit(main(sys.argv[1:])) # pragma: no cover
 
 
 # -- main check
 if __name__ == '__main__':
-    main(sys.argv)
+    main(sys.argv[1:])
