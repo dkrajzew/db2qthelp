@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="latin1"?>
+<QtHelpProject version="1.0">
+    <namespace>de.dks.tst1</namespace>
+    <virtualFolder>doc</virtualFolder>
+    <filterSection>
+        <filterAttribute>tst1</filterAttribute>
+        <toc>
+   <section title="1. chp1title" ref="doc1-chp1.html">
+   </section>
+   <section title="2. chp2title" ref="doc1-chp2.html">
+      <section title="2.1. sect21title" ref="doc1-chp2-sect1.html">
+      </section>
+      <section title="2.2. sect22title" ref="doc1-chp2-sect2.html">
+      </section>
+   </section>
+   <section title="3. chp3title" ref="doc1-chp3.html">
+      <section title="3.1. sect31title" ref="doc1-chp3-sect1.html">
+         <section title="3.1.1. sect311title" ref="doc1-chp3-sect1-sect1.html">
+         </section>
+         <section title="3.1.2. sect312title" ref="doc1-chp3-sect1-sect2.html">
+         </section>
+      </section>
+      <section title="3.2. sect32title" ref="doc1-chp3-sect2.html">
+      </section>
+      <section title="3.3. sect33title" ref="doc1-chp3-sect3.html">
+      </section>
+   </section>
+
+        </toc>
+        <keywords>
+   <keyword name="1. chp1title" ref="./doc1-chp1.html"/>
+   <keyword name="2. chp2title" ref="./doc1-chp2.html"/>
+   <keyword name="2.1. sect21title" ref="./doc1-chp2-sect1.html"/>
+   <keyword name="2.2. sect22title" ref="./doc1-chp2-sect2.html"/>
+   <keyword name="3. chp3title" ref="./doc1-chp3.html"/>
+   <keyword name="3.1. sect31title" ref="./doc1-chp3-sect1.html"/>
+   <keyword name="3.1.1. sect311title" ref="./doc1-chp3-sect1-sect1.html"/>
+   <keyword name="3.1.2. sect312title" ref="./doc1-chp3-sect1-sect2.html"/>
+   <keyword name="3.2. sect32title" ref="./doc1-chp3-sect2.html"/>
+   <keyword name="3.3. sect33title" ref="./doc1-chp3-sect3.html"/>
+
+        </keywords>
+        <files>
+            <file>*.html</file>
+            <file>*.png</file>
+            <file>*.gif</file>
+        </files>
+    </filterSection>
+</QtHelpProject>
