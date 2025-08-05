@@ -240,15 +240,27 @@ class Db2QtHelp:
             fdo_content.write("</body></html>\n")
 
 
-    def _generate_html(self, folder : str) -> None:
+    def _generate_html(self, folder : str) -> int:
         """Generates a chunked HTML document from the source docbook document
 
         Args:
             folder (str): A (temporary) folder to store the xsltproc output to
         """
         shutil.rmtree(folder, ignore_errors=True)
-        print(f"{os.path.join(self._xslt_path, 'xsltproc')} --stringparam base.dir {folder} chunk_html.xsl {self._source}")
-        os.system(f"{os.path.join(self._xslt_path, 'xsltproc')} --stringparam base.dir {folder} chunk_html.xsl {self._source}")
+        #print(f"{os.path.join(self._xslt_path, 'xsltproc')} --stringparam base.dir {folder} chunk_html.xsl {self._source}")
+        try:
+            result = subprocess.run([os.path.join(self._xslt_path, 'xsltproc'),
+                "--stringparam", "base.dir", folder,
+                "chunk_html.xsl", self._source], check = True)
+        except subprocess.CalledProcessError:
+            raise RuntimeError("could not invoke xsltproc...")
+        except FileNotFoundError:
+            raise RuntimeError("could not invoke xsltproc...")
+        if isinstance(result, subprocess.CompletedProcess):
+            ret = result.returncode
+        else:
+            ret = 3
+        return ret
 
 
     def _process_chunked(self, folder : str) -> None:
@@ -325,7 +337,9 @@ class Db2QtHelp:
                 print(f"Processing docboook '{self._source}'")
                 tmp_dir = "tst1" # tempfile.TemporaryDirectory()
                 print("... generating chunked HTML")
-                self._generate_html(tmp_dir)
+                ret = self._generate_html(tmp_dir)
+                if ret!=0:
+                    raise ValueError(f"xsltproc failed with ret={ret}")
                 print("... processing chunked HTML")
                 self._process_chunked(tmp_dir)
             else:
@@ -473,9 +487,14 @@ def main(arguments : List[str] = None) -> int:
     src_folder = [v.replace("\\", "/") for v in args.files.split(",")]
     src_folder.sort(key=lambda t: len(t), reverse=True)
     # process
+    ret = 0
     db2qthelp = Db2QtHelp(args.qt_path, args.xslt_path, args.input, args.source, src_folder, args.destination, args.appname)
-    db2qthelp.process(template)
-    return 0
+    try:
+        db2qthelp.process(template)
+    except Exception as e:
+        print(f"db2qthelp: error: {str(e)}", file=sys.stderr)
+        ret = 2
+    return ret
 
 
 def script_run() -> int:
