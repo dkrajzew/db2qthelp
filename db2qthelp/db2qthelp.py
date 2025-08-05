@@ -97,7 +97,7 @@ QCHP = """<?xml version="1.0" encoding="UTF-8"?>
 
 # --- functions -------------------------------------------------------------
 class Db2QtHelp:
-    def __init__(self, qt_path : str, xslt_path : str, source : str, url : str, src_folder : List[str], dst_folder : str, app_name : str, template : str):
+    def __init__(self, qt_path : str, xslt_path : str, source : str, url : str, src_folder : List[str], dst_folder : str, app_name : str):
         """Contructor
 
         Args:
@@ -107,7 +107,6 @@ class Db2QtHelp:
             src_folder (List[str]): The source folder(s) (where images are located)
             dst_folder (str): The destination folder (where the documentation is built)
             app_name (str): The name of the application
-            template (str): The qhp template to use
         """
         self._qt_path = qt_path
         self._xslt_path = xslt_path
@@ -116,7 +115,6 @@ class Db2QtHelp:
         self._src_folder = src_folder
         self._dst_folder = dst_folder
         self._app_name = app_name
-        self._template = template
         self._toc = ""
         self._keywords = ""
 
@@ -303,7 +301,7 @@ class Db2QtHelp:
         self._toc += indent + "</section>\n"
 
 
-    def process(self) -> None:
+    def process(self, qhp_template : str) -> None:
         """Performs the conversion"""
         # clear output folder
         #shutil.rmtree(self._dst_folder, ignore_errors=True)
@@ -335,9 +333,11 @@ class Db2QtHelp:
         else:
             raise ValueError(f"unknown file '{self._source}'")
         # read template, write extended by collected data
+        if qhp_template is None:
+            qhp_template = TEMPLATE
         path = f"{self._dst_folder}/{self._app_name}"
         with open(path + ".qhp", "w", encoding="utf-8") as fdo:
-            fdo.write(self._template.replace("%toc%", self._toc).replace("%keywords%", self._keywords).replace("%source%", self._url).replace("%appname%", self._app_name))
+            fdo.write(qhp_template.replace("%toc%", self._toc).replace("%keywords%", self._keywords).replace("%source%", self._url).replace("%appname%", self._app_name))
         # generate qhcp
         with open(path + ".qhcp", "w", encoding="utf-8") as fdo:
             fdo.write(QCHP.replace("%appname%", self._app_name))
@@ -473,8 +473,8 @@ def main(arguments : List[str] = None) -> int:
     src_folder = [v.replace("\\", "/") for v in args.files.split(",")]
     src_folder.sort(key=lambda t: len(t), reverse=True)
     # process
-    db2qthelp = Db2QtHelp(args.qt_path, args.xslt_path, args.input, args.source, src_folder, args.destination, args.appname, template)
-    db2qthelp.process()
+    db2qthelp = Db2QtHelp(args.qt_path, args.xslt_path, args.input, args.source, src_folder, args.destination, args.appname)
+    db2qthelp.process(template)
     return 0
 
 
