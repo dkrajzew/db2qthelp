@@ -450,7 +450,7 @@ def main(arguments : List[str] = None) -> int:
     parser.add_argument("-s", "--source", dest="source", default=None, help="Sets the documentation source url")
     parser.add_argument("-f", "--files", dest="files", default="user_images", help="Sets the folder to collect files from")
     parser.add_argument("-d", "--destination", dest="destination", default="qtdoc", help="Sets the output folder")
-    parser.add_argument("-t", "--template", dest="template", default="template.qhp", help="Defines the QtHelp project template to use")
+    parser.add_argument("-t", "--template", dest="template", default=None, help="Defines the QtHelp project template to use")
     parser.add_argument("-g", "--generate", dest="generate", action="store_true", default=False, help="If set, a template is generated")
     parser.add_argument("-q", "--qt-path", dest="qt_path", default="", help="Sets the path to the Qt binaries")
     parser.add_argument("-x", "--xslt-path", dest="xslt_path", default="", help="Sets the path to xsltproc")
@@ -459,7 +459,8 @@ def main(arguments : List[str] = None) -> int:
     args = parser.parse_args(remaining_argv)
     # - generate the template and quit, if wished
     if args.generate:
-        with open(args.template, "w", encoding="utf-8") as fdo:
+        template_name = args.template if args.template is not None else "template.qhp"
+        with open(template_name, "w", encoding="utf-8") as fdo:
             fdo.write(TEMPLATE)
         print (f"Written qhp template to '{args.template}'")
         sys.exit(0)
@@ -471,7 +472,7 @@ def main(arguments : List[str] = None) -> int:
         errors.append("unrecognized input extension '{os.path.splitext(args.input)[1]}'")
     elif not os.path.exists(args.input):
         errors.append("did not find input '{args.input}'")
-    if not os.path.exists(args.template):
+    if args.template is not None and not os.path.exists(args.template):
         errors.append(f"did not find template file '{args.template}'; you may generate one using the option -g")
     if args.appname is None:
         errors.append("no application name given (use -a <APP_NAME>)...")
@@ -484,8 +485,11 @@ def main(arguments : List[str] = None) -> int:
             print(f"db2qthelp: error: {e}", file=sys.stderr)
         raise SystemExit(2)
     # get settings
-    with open(args.template) as fdi:
-        template = fdi.read()
+    if args.template is not None:
+        with open(args.template) as fdi:
+            template = fdi.read()
+    else:
+        template = TEMPLATE
     src_folder = [v.replace("\\", "/") for v in args.files.split(",")]
     src_folder.sort(key=lambda t: len(t), reverse=True)
     # process
