@@ -2,6 +2,8 @@
 
 __db2qthelp__ is a [Python](https://www.python.org/) script. To run it, you must have [Python](https://www.python.org/) installed. If you have not installed [Python](https://www.python.org/), yet, please read instructions on installing [Python](https://www.python.org/) first (see below).
 
+Assuming that you are interested in [DocBook](https://docbook.org/), you are probably aware of [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) as a processing tool. In case your [DocBook](https://docbook.org/) document is not yet converted, you will need [xsltproc](https://gitlab.gnome.org/GNOME/libxslt). Please see below for a brief information about installing [xsltproc](https://gitlab.gnome.org/GNOME/libxslt).
+
 
 ## Installing db2qthelp
 
@@ -77,4 +79,16 @@ You may upgrade pip using:
 ```console
 pip install --upgrade pip
 ```
+
+## Installing xsltproc
+
+[xsltproc](https://gitlab.gnome.org/GNOME/libxslt) is an XSLT processor included in libxslt. There is [gitlab libxslt repository](https://gitlab.gnome.org/GNOME/libxslt) and a [libxslt release downloads](https://download.gnome.org/sources/libxslt/) page.
+
+On Ubuntu Linux you should be able to install [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) using
+
+```console
+sudo apt-get install xsltproc
+```
+
+On Windows, I got my [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) and need libraries from [Igor Zlatkovic's website](https://www.zlatkovic.com/libxml.en.html). Please note that you need libxslt, iconc, libxml2, and zlib. I collected them in a single folder...
 

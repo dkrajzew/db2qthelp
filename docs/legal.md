@@ -20,3 +20,6 @@ These pages were made by Daniel Krajzewicz, 2022&ndash;2025.
 **db2qthelp** is validated using Python's [pytest](https://docs.pytest.org/) and [coverage](https://coverage.readthedocs.io/) packages and the coverage is tracked on [coveralls](https://coveralls.io/). Thank you!
 
 **db2qthelp** uses [mkdocs](https://www.mkdocs.org/) together with the [material extension](https://squidfunk.github.io/mkdocs-material/) for documentation. I like mkdocs very much. Thank you!
+
+I like the possibility to write user documentation using [DocBook](https://docbook.org/). Thank you. In addition, best regards and big thanks go to [Igor Zlatkovic](https://www.zlatkovic.com/) for supporting Windows binaries of [xsltproc](https://gitlab.gnome.org/GNOME/libxslt).
+
