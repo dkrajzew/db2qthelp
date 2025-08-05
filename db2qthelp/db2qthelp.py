@@ -295,14 +295,13 @@ class Db2QtHelp:
             ch = ch + [0,] * (depth - len(ch))
             return ch
         entries.sort(key = lambda x: expand_chapter(x[2], max_depth))
-        #for e in entries:
-        #    print(e)
-        level = 0
-        for e in entries:
+        #
+        level = 1
+        for ie,e in enumerate(entries):
             filename = e[0]
             title = e[1]
             nlevel = len(e[2])
-            while nlevel<=level:
+            while ie!=0 and nlevel<=level:
                 indent = " "*(level*3)
                 self._toc += indent + "</section>\n"
                 level -= 1
@@ -310,8 +309,10 @@ class Db2QtHelp:
             indent = " "*(level*3)
             self._toc += indent + f"<section title=\"{title}\" ref=\"{filename}\">\n"
             self._keywords += f"   <keyword name=\"{title}\" ref=\"./{filename}\"/>\n"
-        indent = " "*(level*3)
-        self._toc += indent + "</section>\n"
+        while level>0:
+            indent = " "*(level*3)
+            self._toc += indent + "</section>\n"
+            level -= 1
 
 
     def process(self, qhp_template : str) -> None:
