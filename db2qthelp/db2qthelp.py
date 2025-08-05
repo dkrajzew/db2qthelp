@@ -471,15 +471,13 @@ def main(arguments : List[str] = None) -> int:
     elif os.path.isfile(args.input) and (not args.input.endswith(".html") and not args.input.endswith(".xml")):
         errors.append("unrecognized input extension '{os.path.splitext(args.input)[1]}'")
     elif not os.path.exists(args.input):
-        errors.append("did not find input '{args.input}'")
+        errors.append(f"did not find input '{args.input}'")
     if args.template is not None and not os.path.exists(args.template):
         errors.append(f"did not find template file '{args.template}'; you may generate one using the option -g")
     if args.appname is None:
         errors.append("no application name given (use -a <APP_NAME>)...")
     if args.source is None:
         errors.append("no source url given (use -s <SOURCE_URL>)...")
-    if args.qt_path is None:
-        errors.append("no path to Qt binaries given (use -p <QT_PATH>)...")
     if len(errors)!=0:
         for e in errors:
             print(f"db2qthelp: error: {e}", file=sys.stderr)
