@@ -1,0 +1,6 @@
+pytest
+coverage
+mkdocs
+mkdocs-material
+mkdocstrings
+mkdocstrings-python
