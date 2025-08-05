@@ -9,3 +9,9 @@
 * The PyPI page is located at: <https://pypi.org/project/db2qthelp/>
 * The code documentation (pydoc) is located at: <http://www.krajzewicz.de/docs/db2qthelp.html>
 
+## Use Cases
+
+* __db2qthelp__ was used to generate the in-app help for the following applications:
+    * [PaletteWB](https://www.palettewb.com), an MS Windows application for editing color palettes;
+    * [ShaderWB](https://www.krajzewicz.de/blog/shaderwb.php), an MS Windows application for developing GLSL shaders.
+    
