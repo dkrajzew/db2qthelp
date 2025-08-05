@@ -25,7 +25,7 @@ import db2qthelp
 
 
 # --- test functions ------------------------------------------------
-def test_main_empty(capsys):
+def test_main_empty1(capsys):
     """Test behaviour if no arguments are given"""
     try:
         db2qthelp.main([])
@@ -35,11 +35,24 @@ def test_main_empty(capsys):
         assert e.code==2
     captured = capsys.readouterr()
     assert captured.err.replace("__main__.py", "db2qthelp.py") == """db2qthelp: error: no input file given (use -i <HTML_DOCBOOK>)...
-db2qthelp: error: did not find template file 'template.qhp'; you may generate one using the option -g
 db2qthelp: error: no application name given (use -a <APP_NAME>)...
 db2qthelp: error: no source url given (use -s <SOURCE_URL>)...
 """
     assert captured.out == ""
+
+
+def test_main_version(capsys):
+    """Test behaviour when version information shall be printed"""
+    try:
+        db2qthelp.main(["--version"])
+        assert False # pragma: no cover
+    except SystemExit as e:
+        assert type(e)==type(SystemExit())
+        assert e.code==0
+    captured = capsys.readouterr()
+    assert captured.out.replace("__main__.py", "db2qthelp.py") == """db2qthelp 0.2.0
+"""
+    assert captured.err == ""
 
 
 def test_main_help(capsys):
@@ -83,32 +96,4 @@ options:
 (c) Daniel Krajzewicz 2022-2025
 """
     assert captured.err == ""
-
-
-def test_main_generate_tpl__short(capsys, tmp_path):
-    """Generates a template using the short option"""
-    p1 = tmp_path / "test.qhp"
-    try:
-        db2qthelp.main(["-g", "-t", str(p1)])
-        assert False # pragma: no cover
-    except SystemExit as e:
-        assert type(e)==type(SystemExit())
-        assert e.code==0
-    assert p1.read_text() == db2qthelp.TEMPLATE
-    captured = capsys.readouterr()
-    assert captured.out.replace("__main__.py", "db2qthelp.py") == "Written qhp template to '%s'\n" % p1
-
-
-def test_main_generate_tpl__long(capsys, tmp_path):
-    """Generates a template using the long option"""
-    p1 = tmp_path / "test.qhp"
-    try:
-        db2qthelp.main(["--generate", "--template", str(p1)])
-        assert False # pragma: no cover
-    except SystemExit as e:
-        assert type(e)==type(SystemExit())
-        assert e.code==0
-    assert p1.read_text() == db2qthelp.TEMPLATE
-    captured = capsys.readouterr()
-    assert captured.out.replace("__main__.py", "db2qthelp.py") == "Written qhp template to '%s'\n" % p1
 

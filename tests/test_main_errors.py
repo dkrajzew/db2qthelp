@@ -1,0 +1,88 @@
+from __future__ import print_function
+"""db2qthelp - main tests.
+"""
+# ===========================================================================
+__author__     = "Daniel Krajzewicz"
+__copyright__  = "Copyright 2022-2024, Daniel Krajzewicz"
+__credits__    = ["Daniel Krajzewicz"]
+__license__    = "BSD"
+__version__    = "0.2.0"
+__maintainer__ = "Daniel Krajzewicz"
+__email__      = "daniel@krajzewicz.de"
+__status__     = "Development"
+# ===========================================================================
+# - https://github.com/dkrajzew/db2qthelp
+# - http://www.krajzewicz.de/docs/db2qthelp/index.html
+# - http://www.krajzewicz.de
+# ===========================================================================
+
+
+# --- imports -----------------------------------------------------------------
+import sys
+import os
+sys.path.append(os.path.join(os.path.split(__file__)[0], "..", "db2qthelp"))
+import db2qthelp
+from util import pname, copy_files, pdirtimename
+
+
+# --- test functions ------------------------------------------------
+def test_main_errors__missing_input(capsys, tmp_path):
+    """Generates a template using the short option"""
+    try:
+        db2qthelp.main(["-i", "foo.xml"])
+        assert False # pragma: no cover
+    except SystemExit as e:
+        assert type(e)==type(SystemExit())
+        assert e.code==2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert pname(captured.err) == """db2qthelp: error: did not find input 'foo.xml'
+db2qthelp: error: no application name given (use -a <APP_NAME>)...
+db2qthelp: error: no source url given (use -s <SOURCE_URL>)...
+"""
+
+def test_main_errors__missing_template(capsys, tmp_path):
+    """Generates a template using the short option"""
+    copy_files(tmp_path, ["tstdoc1.xml"])
+    try:
+        db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "-t", "foo.qhp"])
+        assert False # pragma: no cover
+    except SystemExit as e:
+        assert type(e)==type(SystemExit())
+        assert e.code==2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert pname(captured.err) == """db2qthelp: error: did not find template file 'foo.qhp'; you may generate one using the option -g
+db2qthelp: error: no application name given (use -a <APP_NAME>)...
+db2qthelp: error: no source url given (use -s <SOURCE_URL>)...
+"""
+
+def test_main_errors__missing_appname(capsys, tmp_path):
+    """Generates a template using the short option"""
+    copy_files(tmp_path, ["tstdoc1.xml"])
+    try:
+        db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "-a", "tst"])
+        assert False # pragma: no cover
+    except SystemExit as e:
+        assert type(e)==type(SystemExit())
+        assert e.code==2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert pname(captured.err) == """db2qthelp: error: no source url given (use -s <SOURCE_URL>)...
+"""
+
+    assert pname(captured.err) == """db2qthelp: error: no source url given (use -s <SOURCE_URL>)...
+"""
+
+def test_main_errors__no_xsltproc(capsys, tmp_path):
+    """Generates a template using the short option"""
+    copy_files(tmp_path, ["tstdoc1.xml"])
+    ret = db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "-a", "tst", "-s", ""])
+    assert ret==2
+    captured = capsys.readouterr()
+    assert pdirtimename(captured.out, tmp_path) == """Processing docboook '<DIR>/tstdoc1.xml'
+... generating chunked HTML
+"""    
+    assert captured.err == """db2qthelp: error: could not invoke xsltproc...
+"""
+

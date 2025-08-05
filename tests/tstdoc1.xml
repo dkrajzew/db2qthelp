@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book id="user">
+  <bookinfo id="index">
+    <title>Documentation</title>
+
+    <productname>dbqthelp</productname>
+
+    <productnumber>v0.2.0</productnumber>
+
+    <author>
+      <firstname>Daniel</firstname>
+
+      <surname>Krajzewicz</surname>
+    </author>
+
+    <copyright>
+      <year>2022-2025</year>
+    </copyright>
+  </bookinfo>
+
+  <toc></toc>
+
+  <chapter id="doc1-chp1">
+    <title>chp1title</title>
+
+    <para>chp1blurb.</para>
+  </chapter>
+
+  <chapter id="doc1-chp2">
+    <title>chp2title</title>
+
+    <para>chp2blurb.</para>
+
+    <sect1 id="doc1-chp2-sect1">
+      <title>sect21title</title>
+
+      <para>sect21blurb.</para>
+    </sect1>
+
+    <sect1 id="doc1-chp2-sect2">
+      <title>sect22title</title>
+
+      <para>sect22blurb.</para>
+    </sect1>
+  </chapter>
+
+  <chapter id="doc1-chp3">
+    <title>chp3title</title>
+
+    <para>chp3blurb.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><guimenuitem>ref31</guimenuitem>: ref31blurb “<ulink
+        url="#doc1-chp3-sect1">sect31ref</ulink>”,</para>
+      </listitem>
+
+      <listitem>
+        <para><guimenuitem>ref32</guimenuitem>: ref32blurb “<ulink
+        url="#doc1-chp3-sect2">sect32ref</ulink>”;</para>
+      </listitem>
+
+      <listitem>
+        <para><guimenuitem>ref33</guimenuitem>: ref32blurb “<ulink
+        url="#doc1-chp3-sect3">sect33ref</ulink>”.</para>
+      </listitem>
+    </itemizedlist>
+
+    <sect1 id="doc1-chp3-sect1">
+      <title>sect31title</title>
+
+      <para>sect31blurb..</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><guimenuitem> ref311</guimenuitem>: ref311blurb “<ulink
+          url="#doc1-chp3-sect1-sect1">sect311ref</ulink>”;</para>
+        </listitem>
+
+        <listitem>
+          <para><guimenuitem> ref312</guimenuitem>: ref312blurb “<ulink
+          url="#doc1-chp3-sect1-sect2">sect311ref</ulink>”.</para>
+        </listitem>
+      </itemizedlist>
+
+      <sect2 id="doc1-chp3-sect1-sect1">
+        <title>sect311title</title>
+
+        <para>sect311blurb.</para>
+      </sect2>
+
+      <sect2 id="doc1-chp3-sect1-sect2">
+        <title>sect312title</title>
+
+        <para>sect312blurb.</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="doc1-chp3-sect2">
+      <title>sect32title</title>
+
+      <para>sect32blurb.</para>
+    </sect1>
+
+    <sect1 id="doc1-chp3-sect3">
+      <title>sect33title</title>
+
+      <para>sect33blurb.</para>
+    </sect1>
+  </chapter>
+</book>

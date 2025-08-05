@@ -1,0 +1,84 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""grebakker - Utility functions for tests."""
+# =============================================================================
+__author__     = "Daniel Krajzewicz"
+__copyright__  = "Copyright 2025, Daniel Krajzewicz"
+__credits__    = ["Daniel Krajzewicz"]
+__license__    = "GPL"
+__version__    = "0.4.4"
+__maintainer__ = "Daniel Krajzewicz"
+__email__      = "daniel@krajzewicz.de"
+__status__     = "Development"
+# ===========================================================================
+# - https://github.com/dkrajzew/gresiblos
+# - http://www.krajzewicz.de
+# ===========================================================================
+
+
+# --- imports ---------------------------------------------------------------
+import os
+import shutil
+import re
+import json
+import zipfile
+import pathlib
+import glob
+from zipfile import ZipFile
+TEST_PATH = os.path.split(__file__)[0]
+import errno
+from pathlib import Path
+
+
+
+# --- imports ---------------------------------------------------------------
+def pname(string, path="<DIR>"):
+    string = string.replace(str(path), "<DIR>").replace("\\", "/")
+    return string.replace("__main__.py", "db2qthelp").replace("pytest", "db2qthelp").replace("optional arguments", "options")
+
+def tread(filepath):
+    return filepath.read_text()
+
+#def bread(filepath):
+#    return filepath.read_bytes()
+
+def pdirtimename(string, tmp_path):
+    regex = r'([0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]+)?'
+    string = string.replace(str(tmp_path), "<DIR>").replace("\\", "/")
+    string = pname(string)
+    return re.sub(regex, "<DUR>", string)
+
+def copy_files(tmp_path, files):
+    for file in files:
+        if "*" not in file:
+            shutil.copy(os.path.join(TEST_PATH, file), str(tmp_path / file))
+            continue
+        files2 = glob.glob(os.path.join(TEST_PATH, file))
+        file_dir, _ = os.path.split(file)
+        for file2 in files2:
+            _, file2name = os.path.split(file2)
+            src = os.path.join(TEST_PATH, file_dir, file2name)
+            dst = tmp_path / file_dir / file2name
+            #print("--------------")
+            #print(file2name)
+            #print(tmp_path)
+            #print(src)
+            #print(dst)
+            shutil.copy(file2, dst)
+
+
+def compare_files(tmp_path, folder, ext):
+    seen = 0
+    wrong = 0
+    for file in os.listdir(os.path.join(tmp_path, folder)):
+        if ext is not None:
+            _, file_extension = os.path.splitext(file)
+            if ext!=file_extension:
+                continue
+        orig = tread(Path(TEST_PATH) / folder / file)
+        gen = tread(Path(tmp_path) / folder / file)
+        if orig!=gen:
+            wrong += 1 # pragma: no cover
+            print(f"Mismatch for '{file}'") # pragma: no cover
+        seen += 1
+    return seen, wrong
