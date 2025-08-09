@@ -193,14 +193,6 @@ class Db2QtHelp:
         fdo_content.write(indent + f"<li><a href=\"{db_id}.html\">{name}</a></li>\n")
         self._toc += indent + f"<section title=\"{name}\" ref=\"{db_id}.html\">\n"
         self._keywords += f"   <keyword name=\"{name}\" ref=\"./{db_id}.html\"/>\n"
-        """
-        if level>3:
-            fdo = open("qtdoc/%s.html" % db_id, "w")
-            fdo.write(c)
-            fdo.close()
-            toc += indent + "</section>\n"
-            return toc
-        """
         subs = c.split(f"<div class=\"sect{level}\">")
         if subs[0].rfind("</div>")>=len(subs[0])-6:
             subs[0] = subs[0][:subs[0].rfind("</div>")]
@@ -280,13 +272,8 @@ class Db2QtHelp:
             with open(file) as fd:
                 html = fd.read()
             title = self._get_title(html)
-            #print(f"'{title.split()[0]}'")
-            #print(f"'{title.split()[0].split('.')}'")
-            #print(f"'{title.split()[0].split('.')[:-1]}'")
             tchapter = title.split()[0].split(".")[:-1]
-            #print(chapter)
             chapter = [int(x) for x in tchapter]
-            #print(chapter)
             max_depth = max(len(chapter), max_depth)
             entries.append([filename, title, chapter])
         # sort entries
