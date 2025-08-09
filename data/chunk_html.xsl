@@ -2,20 +2,38 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   version="1.0">
-<xsl:import href="$(docbook_docs)/docbook.xsl"/>
+<xsl:import href="$(docbook_docs)/chunk.xsl"/>
   
+<xsl:param name="fop1.extensions" select="1"/>
 <xsl:param name="local.l10n.xml" select="document('')"/> 
 
 <l:i18n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0">
   <l:l10n language="en"> 
     <l:context name="title-numbered"> 
-      <l:template name="chapter" text="%n.&#160;%t "/> 
+      <l:template name="chapter" text="%n.&#160;%t&#160;"/> 
     </l:context>    
   </l:l10n>
 </l:i18n>
+
+<xsl:param name="suppress.navigation" select="1"/> 
+
+<!--
+<xsl:param name="title.page.header" select="0"/> 
+<xsl:param name="title.page.footer" select="0"/> 
+<xsl:param name="preamble.header" select="0"/> 
+<xsl:param name="preamble.footer" select="0"/> 
+-->
+
+<!-- xsl:param name="generate.manifest" select="1"/ --> 
+<!-- xsl:param name="chunk.tocs.and.lots" select="1"/ --> 
+
+
 <xsl:param name="chapter.autolabel" select="1"/> 
 <xsl:param name="section.autolabel" select="1"/> 
 <xsl:param name="section.label.includes.component.label" select="1"/> 
+<xsl:param name="use.id.as.filename" select="1"/> 
+<xsl:param name="chunk.first.sections" select="1"/> 
+<xsl:param name="chunk.section.depth" select="3"/> 
 <xsl:param name="component.label.includes.part.label" select="1"/> 
 <xsl:param name="label.from.part" select="1"/> 
 <xsl:param name="use.extensions" select="0"/> 
@@ -59,4 +77,7 @@ sect5     nop
 section   nop
 set       toc,title
 </xsl:param>
+
+
+
 </xsl:stylesheet>

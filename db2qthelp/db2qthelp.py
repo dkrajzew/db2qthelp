@@ -98,19 +98,21 @@ QCHP = """<?xml version="1.0" encoding="UTF-8"?>
 
 # --- functions -------------------------------------------------------------
 class Db2QtHelp:
-    def __init__(self, qt_path : str, xslt_path : str, source : str, src_folder : List[str], dst_folder : str, app_name : str):
+    def __init__(self, qt_path : str, xsltproc_path : str, docbook_path : str, source : str, src_folder : List[str], dst_folder : str, app_name : str):
         """Contructor
 
         Args:
             qt_path (str): Path to the Qt binaries
-            source (str): Path to the docbook/html source to process
+            xslt_path (str): Path to the xsltproc binary
+            docbook_path (str): Path to the DocBook xslt files
             url (str): The url of the documentation
             src_folder (List[str]): The source folder(s) (where images are located)
             dst_folder (str): The destination folder (where the documentation is built)
             app_name (str): The name of the application
         """
         self._qt_path = qt_path
-        self._xslt_path = xslt_path
+        self._xsltproc_path = xsltproc_path
+        self._docbook_path = docbook_path
         self._source = source
         self._src_folder = src_folder
         self._dst_folder = dst_folder
@@ -239,9 +241,9 @@ class Db2QtHelp:
             folder (str): A (temporary) folder to store the xsltproc output to
         """
         shutil.rmtree(folder, ignore_errors=True)
-        #print(f"{os.path.join(self._xslt_path, 'xsltproc')} --stringparam base.dir {folder} chunk_html.xsl {self._source}")
         try:
-            result = subprocess.run([os.path.join(self._xslt_path, 'xsltproc'),
+            result = subprocess.run([os.path.join(self._xsltproc_path, 'xsltproc'),
+                "--stringparam", "docbook_docs", self._docbook_path,
                 "--stringparam", "base.dir", folder,
                 "chunk_html.xsl", self._source], check = True)
         except subprocess.CalledProcessError:
@@ -439,6 +441,7 @@ def main(arguments : List[str] = None) -> int:
     parser.add_argument("-g", "--generate", dest="generate", action="store_true", default=False, help="If set, a template is generated")
     parser.add_argument("-Q", "--qt-path", dest="qt_path", default="", help="Sets the path to the Qt binaries")
     parser.add_argument("-X", "--xslt-path", dest="xslt_path", default="", help="Sets the path to xsltproc")
+    parser.add_argument("-D", "--docbook-path", dest="docbook_path", default="", help="Sets the path to DocBook xslt files")
     parser.add_argument('--version', action='version', version='%(prog)s 0.2.0')
     parser.set_defaults(**defaults)
     args = parser.parse_args(remaining_argv)
@@ -473,7 +476,7 @@ def main(arguments : List[str] = None) -> int:
     src_folder.sort(key=lambda t: len(t), reverse=True)
     # process
     ret = 0
-    db2qthelp = Db2QtHelp(args.qt_path, args.xslt_path, args.input, src_folder, args.destination, args.appname)
+    db2qthelp = Db2QtHelp(args.qt_path, args.xslt_path, args.docbook_path, args.input, src_folder, args.destination, args.appname)
     try:
         db2qthelp.process(template)
     except Exception as e:
