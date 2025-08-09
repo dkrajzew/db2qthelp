@@ -32,14 +32,15 @@ def test_main_proc_chunked_html__1(capsys, tmp_path):
     os.environ["PATH"] += os.pathsep + "D:\\products\\z_dev\\docbook\\libxslt-1.1.26.win32\\bin"
     os.makedirs(tmp_path / "tstdoc1_chunked_html", exist_ok=True)
     copy_files(tmp_path, ["tstdoc1_chunked_html/*.html"])
-    dst_folder = str(tmp_path / "tstdoc1_chunked_html")
+    assert compare_files(tmp_path, "tstdoc1_chunked_html", ".html")==(11, 0)
+    dst_folder = str(tmp_path / "tstdoc1_chunked_html_output")
     ret = db2qthelp.main(["-i", str(tmp_path / "tstdoc1_chunked_html"), "-a", "tst1", "-s", "de.dks.tst1", "--destination", dst_folder])
     assert ret==0
+    compare_files(tmp_path, "tstdoc1_chunked_html_output", ".qhcp")
+    compare_files(tmp_path, "tstdoc1_chunked_html_output", ".qhp")
     captured = capsys.readouterr()
     assert pdirtimename(captured.out, tmp_path) == """Processing chunked HTML output from '<DIR>/tstdoc1_chunked_html'
 """
     assert captured.err == ""
-    assert compare_files(tmp_path, "tstdoc1_chunked_html", ".qhcp")==(1, 0)
-    assert compare_files(tmp_path, "tstdoc1_chunked_html", ".qhp")==(1, 0)
 
 

@@ -77,12 +77,13 @@ def test_main_errors__missing_appname(capsys, tmp_path):
 def test_main_errors__no_xsltproc(capsys, tmp_path):
     """Generates a template using the short option"""
     copy_files(tmp_path, ["tstdoc1.xml"])
-    ret = db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "-a", "tst", "-s", ""])
+    dst_folder = str(tmp_path / "tmp")
+    ret = db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "-a", "tst", "-s", "", "-d", dst_folder])
     assert ret==2
     captured = capsys.readouterr()
     assert pdirtimename(captured.out, tmp_path) == """Processing docboook '<DIR>/tstdoc1.xml'
 ... generating chunked HTML
-"""    
+"""
     assert captured.err == """db2qthelp: error: could not invoke xsltproc...
 """
 

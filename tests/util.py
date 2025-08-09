@@ -59,13 +59,7 @@ def copy_files(tmp_path, files):
             _, file2name = os.path.split(file2)
             src = os.path.join(TEST_PATH, file_dir, file2name)
             dst = tmp_path / file_dir / file2name
-            #print("--------------")
-            #print(file2name)
-            #print(tmp_path)
-            #print(src)
-            #print(dst)
             shutil.copy(file2, dst)
-
 
 def compare_files(tmp_path, folder, ext):
     seen = 0
@@ -80,5 +74,7 @@ def compare_files(tmp_path, folder, ext):
         if orig!=gen:
             wrong += 1 # pragma: no cover
             print(f"Mismatch for '{file}'") # pragma: no cover
+            print(f"    '{Path(TEST_PATH) / folder / file}'") # pragma: no cover
+            print(f"    '{Path(tmp_path) / folder / file}'") # pragma: no cover
         seen += 1
     return seen, wrong
