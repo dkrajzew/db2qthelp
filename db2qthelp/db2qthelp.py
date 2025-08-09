@@ -32,7 +32,7 @@ from typing import List
 
 
 # --- variables and constants -----------------------------------------------
-STYLE = """
+CSS_TEMPLATE = """
 <style>
 body {
  margin: 0;
@@ -194,7 +194,7 @@ class Db2QtHelp:
             subs[0] = subs[0].replace(f"src=\"{s}/", f"src=\"qthelp://{app_name}/doc/")
         subs[0] = re.sub(r'<a href="#([^"]*)">([^<]*)</a>', r'<a href="\1.html">\2</a>', subs[0])
         subs[0] = re.sub(r'<a class="ulink" href="#([^"]*)">([^<]*)</a>', r'<a class="ulink" href="\1.html">\2</a>', subs[0])
-        subs[0] = "<html><head>" + STYLE + "</head><body>" + subs[0] + "</body></html>"
+        subs[0] = "<html><head>" + CSS_TEMPLATE + "</head><body>" + subs[0] + "</body></html>"
         with open(dst_folder + f"/{db_id}.html", "w", encoding="utf-8") as fdo:
             fdo.write(subs[0])
         if len(subs)>1:
@@ -221,7 +221,7 @@ class Db2QtHelp:
             doc = fdi.read()
         # process document
         with open(f"{dst_folder}/toc.html", "w", encoding="utf-8") as fdo_content:
-            fdo_content.write("<html><head>" + STYLE + "</head><body>\n")
+            fdo_content.write("<html><head>" + CSS_TEMPLATE + "</head><body>\n")
             chapters = doc.split("<div class=\"chapter\">")
             appendices = chapters[-1].split('<div class="appendix">')
             chapters = chapters[:-1]
