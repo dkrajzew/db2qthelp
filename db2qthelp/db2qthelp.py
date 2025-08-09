@@ -59,7 +59,7 @@ div.informalequation { text-align: center; font-style: italic; }
 </style>
 """
 
-TEMPLATE = """<?xml version="1.0" encoding="latin1"?>
+QHP_TEMPLATE = """<?xml version="1.0" encoding="latin1"?>
 <QtHelpProject version="1.0">
     <namespace>%appname%</namespace>
     <virtualFolder>doc</virtualFolder>
@@ -108,7 +108,7 @@ class Db2QtHelp:
         """
         self._qt_path = qt_path
         self._xsltproc_path = xsltproc_path
-        self._qhp_template = qhp_template if qhp_template is not None else TEMPLATE
+        self._qhp_template = qhp_template if qhp_template is not None else QHP_TEMPLATE
         self._toc = ""
         self._keywords = ""
 
@@ -450,7 +450,7 @@ def main(arguments : List[str] = None) -> int:
     if args.generate:
         template_name = args.template if args.template is not None else "template.qhp"
         with open(template_name, "w", encoding="utf-8") as fdo:
-            fdo.write(TEMPLATE)
+            fdo.write(QHP_TEMPLATE)
         print (f"Written qhp template to '{args.template}'")
         sys.exit(0)
     # check
