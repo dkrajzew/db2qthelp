@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="latin1"?>
 <QtHelpProject version="1.0">
-    <namespace>de.dks.tst1</namespace>
+    <namespace>tst1</namespace>
     <virtualFolder>doc</virtualFolder>
     <filterSection>
         <filterAttribute>tst1</filterAttribute>

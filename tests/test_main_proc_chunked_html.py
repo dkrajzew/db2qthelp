@@ -34,7 +34,7 @@ def test_main_proc_chunked_html__1(capsys, tmp_path):
     copy_files(tmp_path, ["tstdoc1_chunked_html/*.html"])
     assert compare_files(tmp_path, "tstdoc1_chunked_html", ".html")==(11, 0)
     dst_folder = str(tmp_path / "tstdoc1_chunked_html_output")
-    ret = db2qthelp.main(["-i", str(tmp_path / "tstdoc1_chunked_html"), "-a", "tst1", "-s", "de.dks.tst1", "--destination", dst_folder])
+    ret = db2qthelp.main(["-i", str(tmp_path / "tstdoc1_chunked_html"), "-a", "tst1", "--destination", dst_folder])
     assert ret==0
     compare_files(tmp_path, "tstdoc1_chunked_html_output", ".qhcp")
     compare_files(tmp_path, "tstdoc1_chunked_html_output", ".qhp")

@@ -37,8 +37,6 @@ def test_main_errors__missing_input(capsys, tmp_path):
     captured = capsys.readouterr()
     assert captured.out == ""
     assert pname(captured.err) == """db2qthelp: error: did not find input 'foo.xml'
-db2qthelp: error: no application name given (use -a <APP_NAME>)...
-db2qthelp: error: no source url given (use -s <SOURCE_URL>)...
 """
 
 def test_main_errors__missing_template(capsys, tmp_path):
@@ -53,32 +51,13 @@ def test_main_errors__missing_template(capsys, tmp_path):
     captured = capsys.readouterr()
     assert captured.out == ""
     assert pname(captured.err) == """db2qthelp: error: did not find template file 'foo.qhp'; you may generate one using the option -g
-db2qthelp: error: no application name given (use -a <APP_NAME>)...
-db2qthelp: error: no source url given (use -s <SOURCE_URL>)...
-"""
-
-def test_main_errors__missing_appname(capsys, tmp_path):
-    """Generates a template using the short option"""
-    copy_files(tmp_path, ["tstdoc1.xml"])
-    try:
-        db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "-a", "tst"])
-        assert False # pragma: no cover
-    except SystemExit as e:
-        assert type(e)==type(SystemExit())
-        assert e.code==2
-    captured = capsys.readouterr()
-    assert captured.out == ""
-    assert pname(captured.err) == """db2qthelp: error: no source url given (use -s <SOURCE_URL>)...
-"""
-
-    assert pname(captured.err) == """db2qthelp: error: no source url given (use -s <SOURCE_URL>)...
 """
 
 def test_main_errors__no_xsltproc(capsys, tmp_path):
     """Generates a template using the short option"""
     copy_files(tmp_path, ["tstdoc1.xml"])
     dst_folder = str(tmp_path / "tmp")
-    ret = db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "-a", "tst", "-s", "", "-d", dst_folder])
+    ret = db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "-a", "tst", "-d", dst_folder])
     assert ret==2
     captured = capsys.readouterr()
     assert pdirtimename(captured.out, tmp_path) == """Processing docboook '<DIR>/tstdoc1.xml'

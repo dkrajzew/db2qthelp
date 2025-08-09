@@ -61,7 +61,7 @@ div.informalequation { text-align: center; font-style: italic; }
 
 TEMPLATE = """<?xml version="1.0" encoding="latin1"?>
 <QtHelpProject version="1.0">
-    <namespace>%source%</namespace>
+    <namespace>%appname%</namespace>
     <virtualFolder>doc</virtualFolder>
     <filterSection>
         <filterAttribute>%appname%</filterAttribute>
@@ -98,7 +98,7 @@ QCHP = """<?xml version="1.0" encoding="UTF-8"?>
 
 # --- functions -------------------------------------------------------------
 class Db2QtHelp:
-    def __init__(self, qt_path : str, xslt_path : str, source : str, url : str, src_folder : List[str], dst_folder : str, app_name : str):
+    def __init__(self, qt_path : str, xslt_path : str, source : str, src_folder : List[str], dst_folder : str, app_name : str):
         """Contructor
 
         Args:
@@ -112,7 +112,6 @@ class Db2QtHelp:
         self._qt_path = qt_path
         self._xslt_path = xslt_path
         self._source = source
-        self._url = url
         self._src_folder = src_folder
         self._dst_folder = dst_folder
         self._app_name = app_name
@@ -197,7 +196,7 @@ class Db2QtHelp:
         if subs[0].rfind("</div>")>=len(subs[0])-6:
             subs[0] = subs[0][:subs[0].rfind("</div>")]
         for s in self._src_folder:
-            subs[0] = subs[0].replace(f"src=\"{s}/", f"src=\"qthelp://{self._url}/doc/")
+            subs[0] = subs[0].replace(f"src=\"{s}/", f"src=\"qthelp://{self._app_name}/doc/")
         subs[0] = re.sub(r'<a href="#([^"]*)">([^<]*)</a>', r'<a href="\1.html">\2</a>', subs[0])
         subs[0] = re.sub(r'<a class="ulink" href="#([^"]*)">([^<]*)</a>', r'<a class="ulink" href="\1.html">\2</a>', subs[0])
         subs[0] = "<html><head>" + STYLE + "</head><body>" + subs[0] + "</body></html>"
@@ -210,7 +209,7 @@ class Db2QtHelp:
                     continue
                 sub = sub[:sub.rfind("</div>")]
                 for s in self._src_folder:
-                    sub = sub.replace(f"src=\"{s}/", f"src=\"qthelp://{self._url}/doc/")
+                    sub = sub.replace(f"src=\"{s}/", f"src=\"qthelp://{self._app_name}/doc/")
                 self._write_sections_recursive(sub, fdo_content, level+1)
             fdo_content.write(indent + "</ul>\n")
         self._toc += indent + "</section>\n"
@@ -340,7 +339,7 @@ class Db2QtHelp:
             qhp_template = TEMPLATE
         path = f"{self._dst_folder}/{self._app_name}"
         with open(path + ".qhp", "w", encoding="utf-8") as fdo:
-            fdo.write(qhp_template.replace("%toc%", self._toc).replace("%keywords%", self._keywords).replace("%source%", self._url).replace("%appname%", self._app_name))
+            fdo.write(qhp_template.replace("%toc%", self._toc).replace("%keywords%", self._keywords).replace("%appname%", self._app_name))
         # generate qhcp
         with open(path + ".qhcp", "w", encoding="utf-8") as fdo:
             fdo.write(QCHP.replace("%appname%", self._app_name))
@@ -433,11 +432,10 @@ def main(arguments : List[str] = None) -> int:
         description="a DocBook book to QtHelp project converter",
         epilog='(c) Daniel Krajzewicz 2022-2025')
     parser.add_argument("-i", "--input", dest="input", default=None, help="Defines the DocBook HTML document to parse")
-    parser.add_argument("-a", "--appname", dest="appname", default=None, help="Sets the name of the application")
-    parser.add_argument("-s", "--source", dest="source", default=None, help="Sets the documentation source url")
     parser.add_argument("-f", "--files", dest="files", default="user_images", help="Sets the folder to collect files from")
     parser.add_argument("-d", "--destination", dest="destination", default="qtdoc", help="Sets the output folder")
     parser.add_argument("-t", "--template", dest="template", default=None, help="Defines the QtHelp project template to use")
+    parser.add_argument("-a", "--appname", dest="appname", default="na", help="Sets the name of the application")
     parser.add_argument("-g", "--generate", dest="generate", action="store_true", default=False, help="If set, a template is generated")
     parser.add_argument("-q", "--qt-path", dest="qt_path", default="", help="Sets the path to the Qt binaries")
     parser.add_argument("-x", "--xslt-path", dest="xslt_path", default="", help="Sets the path to xsltproc")
@@ -461,10 +459,6 @@ def main(arguments : List[str] = None) -> int:
         errors.append(f"did not find input '{args.input}'")
     if args.template is not None and not os.path.exists(args.template):
         errors.append(f"did not find template file '{args.template}'; you may generate one using the option -g")
-    if args.appname is None:
-        errors.append("no application name given (use -a <APP_NAME>)...")
-    if args.source is None:
-        errors.append("no source url given (use -s <SOURCE_URL>)...")
     if len(errors)!=0:
         for e in errors:
             print(f"db2qthelp: error: {e}", file=sys.stderr)
@@ -479,7 +473,7 @@ def main(arguments : List[str] = None) -> int:
     src_folder.sort(key=lambda t: len(t), reverse=True)
     # process
     ret = 0
-    db2qthelp = Db2QtHelp(args.qt_path, args.xslt_path, args.input, args.source, src_folder, args.destination, args.appname)
+    db2qthelp = Db2QtHelp(args.qt_path, args.xslt_path, args.input, src_folder, args.destination, args.appname)
     try:
         db2qthelp.process(template)
     except Exception as e:

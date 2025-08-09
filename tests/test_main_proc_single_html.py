@@ -32,7 +32,7 @@ def test_main_proc_single_html__1(capsys, tmp_path):
     os.environ["PATH"] += os.pathsep + "D:\\products\\z_dev\\docbook\\libxslt-1.1.26.win32\\bin"
     copy_files(tmp_path, ["tstdoc1.html"])
     dst_folder = str(tmp_path / "tstdoc1_single_html")
-    ret = db2qthelp.main(["-i", str(tmp_path / "tstdoc1.html"), "-a", "tst1", "-s", "de.dks.tst1", "--destination", dst_folder])
+    ret = db2qthelp.main(["-i", str(tmp_path / "tstdoc1.html"), "-a", "tst1", "--destination", dst_folder])
     assert ret==0
     captured = capsys.readouterr()
     assert pdirtimename(captured.out, tmp_path) == """Processing single HTML output from '<DIR>/tstdoc1.html'

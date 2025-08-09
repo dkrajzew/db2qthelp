@@ -35,8 +35,6 @@ def test_main_empty1(capsys):
         assert e.code==2
     captured = capsys.readouterr()
     assert captured.err.replace("__main__.py", "db2qthelp.py") == """db2qthelp: error: no input file given (use -i <HTML_DOCBOOK>)...
-db2qthelp: error: no application name given (use -a <APP_NAME>)...
-db2qthelp: error: no source url given (use -s <SOURCE_URL>)...
 """
     assert captured.out == ""
 
@@ -64,9 +62,9 @@ def test_main_help(capsys):
         assert type(e)==type(SystemExit())
         assert e.code==0
     captured = capsys.readouterr()
-    assert captured.out.replace("__main__.py", "db2qthelp.py") == """usage: db2qthelp [-h] [-c FILE] [-i INPUT] [-a APPNAME] [-s SOURCE] [-f FILES]
-                 [-d DESTINATION] [-t TEMPLATE] [-g] [-q QT_PATH]
-                 [-x XSLT_PATH] [--version]
+    assert captured.out.replace("__main__.py", "db2qthelp.py") == """usage: db2qthelp [-h] [-c FILE] [-i INPUT] [-f FILES] [-d DESTINATION]
+                 [-t TEMPLATE] [-a APPNAME] [-g] [-q QT_PATH] [-x XSLT_PATH]
+                 [--version]
 
 a DocBook book to QtHelp project converter
 
@@ -76,16 +74,14 @@ options:
                         Reads the named configuration file
   -i INPUT, --input INPUT
                         Defines the DocBook HTML document to parse
-  -a APPNAME, --appname APPNAME
-                        Sets the name of the application
-  -s SOURCE, --source SOURCE
-                        Sets the documentation source url
   -f FILES, --files FILES
                         Sets the folder to collect files from
   -d DESTINATION, --destination DESTINATION
                         Sets the output folder
   -t TEMPLATE, --template TEMPLATE
                         Defines the QtHelp project template to use
+  -a APPNAME, --appname APPNAME
+                        Sets the name of the application
   -g, --generate        If set, a template is generated
   -q QT_PATH, --qt-path QT_PATH
                         Sets the path to the Qt binaries
