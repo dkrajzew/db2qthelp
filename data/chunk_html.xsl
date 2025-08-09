@@ -2,7 +2,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   version="1.0">
-<xsl:import href="$(docbook_docs)/chunk.xsl"/>
+<xsl:import href="http://cdn.docbook.org/release/xsl/current/html/chunk.xsl"/>
   
 <xsl:param name="fop1.extensions" select="1"/>
 <xsl:param name="local.l10n.xml" select="document('')"/> 
