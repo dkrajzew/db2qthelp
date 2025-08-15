@@ -33,7 +33,6 @@ from typing import List, Set, Tuple
 
 # --- variables and constants -----------------------------------------------
 CSS_DEFINITION = """
-<style>
 body {
  margin: 0;
  padding: 0 0 0 0;
@@ -56,7 +55,6 @@ div.informalequation { text-align: center; font-style: italic; }
 .note p { background-color: #e0f0ff; margin: 8px 8px 8px 8px; }
 .tip p { background-color: #c0ffc0; margin: 8px 8px 8px 8px; }
 .warning p { background-color: #ffff80; margin: 8px 8px 8px 8px; }
-</style>
 """
 
 QHP_TEMPLATE = """<?xml version="1.0" encoding="latin1"?>
@@ -110,6 +108,7 @@ class Db2QtHelp:
         self._qt_path = qt_path
         self._xsltproc_path = xsltproc_path
         self._css_definition = css_definition if css_definition is not None else CSS_DEFINITION
+        self._css_definition = "<style>\n" + self._css_definition + "\n</style>\n"
         self._qhp_template = qhp_template if qhp_template is not None else QHP_TEMPLATE
 
 
