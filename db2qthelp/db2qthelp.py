@@ -32,8 +32,7 @@ from typing import List, Set, Tuple
 
 
 # --- variables and constants -----------------------------------------------
-CSS_DEFINITION = """
-body {
+CSS_DEFINITION = """body {
  margin: 0;
  padding: 0 0 0 0;
  background-color: rgba(255, 255, 255, 1);
@@ -108,7 +107,7 @@ class Db2QtHelp:
         self._qt_path = qt_path
         self._xsltproc_path = xsltproc_path
         self._css_definition = css_definition if css_definition is not None else CSS_DEFINITION
-        self._css_definition = "<style>\n" + self._css_definition + "\n</style>\n"
+        self._css_definition = "\n<style>\n" + self._css_definition + "</style>\n"
         self._qhp_template = qhp_template if qhp_template is not None else QHP_TEMPLATE
 
 
@@ -313,19 +312,19 @@ class Db2QtHelp:
             title = e[1]
             nlevel = len(e[2])
             while ie!=0 and nlevel<=level:
-                indent = " "*(level*3)
+                indent = " "*(level*4+8)
                 toc += indent + "</section>\n"
                 level -= 1
             level = nlevel
-            indent = " "*(level*3)
+            indent = " "*(level*4+8)
             toc += indent + f"<section title=\"{title}\" ref=\"{filename}\">\n"
         while level>0:
-            indent = " "*(level*3)
+            indent = " "*(level*4+8)
             toc += indent + "</section>\n"
             level -= 1
         return toc
 
-
+    """
     def build_toc_list(self, pages):
         toc = ""
         level = 0
@@ -348,7 +347,7 @@ class Db2QtHelp:
             toc += indent + "</ul>\n"
             level -= 1
         return toc
-
+    """
 
     def process(self, source : str, dst_folder : str, app_name : str) -> None:
         """Performs the conversion
@@ -400,13 +399,15 @@ class Db2QtHelp:
             max_depth = max(len(chapter), max_depth)
         pages.sort(key = lambda x: expand_chapter(x[2], max_depth))
         #
+        """
         with open(f"{dst_folder}/toc.html", "w", encoding="utf-8") as fdo_content:
            fdo_content.write("<html><head>" + self._css_definition + "</head><body>\n")
            fdo_content.write(self.build_toc_list(pages))
            fdo_content.write("</body></html>\n")
+        """
         #
         toc = self.build_toc_sections(pages)
-        keywords = "\n".join(f"   <keyword name=\"{page[1]}\" ref=\"./{page[0]}\"/>\n" for page in pages)
+        keywords = "\n".join(" "*12 + f"<keyword name=\"{page[1]}\" ref=\"./{page[0]}\"/>" for page in pages)
         # read template, write extended by collected data
         path = f"{dst_folder}/{app_name}"
         with open(path + ".qhp", "w", encoding="utf-8") as fdo:

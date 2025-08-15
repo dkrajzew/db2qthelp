@@ -38,7 +38,7 @@ def test_main_proc_single_html__1(capsys, tmp_path):
     assert pdirtimename(captured.out, tmp_path) == """Processing single HTML output from '<DIR>/tstdoc1.html'
 """
     assert captured.err == ""
-    assert compare_files(tmp_path, "tstdoc1_single_html", ".html")==(12, 0)
+    assert compare_files(tmp_path, "tstdoc1_single_html", ".html")==(11, 0)
     assert compare_files(tmp_path, "tstdoc1_single_html", ".qhcp")==(1, 0)
     assert compare_files(tmp_path, "tstdoc1_single_html", ".qhp")==(1, 0)
 
