@@ -19,15 +19,13 @@ You may __install db2qthelp__ using
 python -m pip install db2qthelp
 ```
 
-You may consider building a virtual environment, first.
+This will install __db2qthelp__ as a script that may be directly called on the command line. The PyPi version only includes the (executable) source code and files needed to run it. You may consider building a virtual environment, first.
 
 You may then run __db2qthelp__ using 
 
 ```console
 db2qthelp
 ```
-
-This will install __db2qthelp__ as a script that may be directly called on the command line. The PyPi version only includes the (executable) source code and files needed to run it.
 
 ### Cloning the repository
 
@@ -91,4 +89,18 @@ sudo apt-get install xsltproc
 ```
 
 On Windows, I got my [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) and need libraries from [Igor Zlatkovic's website](https://www.zlatkovic.com/libxml.en.html). Please note that you need libxslt, iconc, libxml2, and zlib. I collected them in a single folder...
+
+## Some further notes
+
+You should add both, [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) folder as well as the folder your [Qt](https://www.qt.io/) binaries reside in to the path. On Windows (of course, depending on the location on your system):
+
+```console
+set PATH=%PATH%;D:\libs\Qt\5.15.2\msvc2019\bin;D:\z_dev\docbook\libxslt-1.1.26.win32\bin
+```
+
+And you should set the XML_CATALOG_FILES to point to the ```catalog.xml``` file of your [DocBook](https://docbook.org/) xsl catalogue.
+
+```console
+set XML_CATALOG_FILES=D:\z_dev\docbook\docbook-xsl-1.79.2\catalog.xml
+```
 

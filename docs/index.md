@@ -17,31 +17,17 @@ __db2qthelp__ &mdash; a DocBook book to QtHelp project converter
 
 __db2qthelp__ converts a [DocBook](https://docbook.org/) [book](https://tdg.docbook.org/tdg/4.5/book.html) to a [QtHelp](https://doc.qt.io/qt-5/qthelp-framework.html) project. It is written in [Python](https://www.python.org/) and started on the command line.
 
-__db2qthelp__ is in an early stage of development. It works well for me but it may work with my setup only.
-
-Any feedback is appreciated.
-
+__db2qthelp__ is in an early stage of development. It works well for me but it may work with my setup only. I try to make it usable nonetheless, so let me know if something does not work. Thanks.
 
 ## Usage
 
-Convert your docbook documentation into a single HTML document, first:
+Given that your [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) together with your [DocBook](https://docbook.org/) look-up paths are set up and that the [Qt](https://www.qt.io/) applications needed to build [Qt](https://www.qt.io/) Help files are in your executable path, you may convert your [DocBook](https://docbook.org/) book into [Qt](https://www.qt.io/) Help files like this:
 
 ```console
-xsltproc.exe --output userdocs.html single_html.xsl userdocs.xml
+db2qthelp.py -i userdocs.xml
 ```
 
-Then generate a basic QtHelp template using:
-
-```console
-db2qthelp --generate
-```
-
-After editing it to fit your needs, generate the QtHelp:
-
-```console
-db2qthelp -i userdocs.html -t template.qhp -s org.foo.bar.MyFancyApp_v0.1 -a MyFancyApp -p c:\Qt\bin
-```
-
+That's all &#x1F603;. You'll get a .qch and a .qhc file you may use directly in your [Qt](https://www.qt.io/) Help widget...
 
 ## Documentation
 
