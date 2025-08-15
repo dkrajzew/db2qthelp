@@ -170,7 +170,7 @@ class Db2QtHelp:
         Returns:
             (str): The changed document
         """
-        srcs = re.findall('src\s*=\s*"(.+?)"', doc)
+        srcs = re.findall(r'src\s*=\s*"(.+?)"', doc)
         seen = set()
         for src in srcs:
             filename = os.path.split(src)[1]
