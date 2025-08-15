@@ -298,11 +298,11 @@ class Db2QtHelp:
             pages.append([filename, title])
 
 
-    def _copy_files(self, files, source):
+    def _copy_files(self, files, source, dst_folder):
         base_path = source if os.path.isdir(source) else os.path.split(source)[0]
         for file in files:
             _, filename = os.path.split(file)
-            shutil.copy(os.path.join(source, file), f"{dst_folder}/{filename}")
+            shutil.copy(os.path.join(base_path, file), f"{dst_folder}/{filename}")
 
 
     def build_toc_sections(self, pages):
@@ -385,7 +385,7 @@ class Db2QtHelp:
         else:
             raise ValueError(f"unknown file '{source}'")
         # copy images etc.
-        self._copy_files(files)
+        self._copy_files(files, source, dst_folder)
         # sort pages
         # https://stackoverflow.com/questions/14861843/sorting-chapters-numbers-like-1-2-1-or-1-4-2-4
         def expand_chapter(ch, depth):
