@@ -63,7 +63,9 @@ def test_main_help(capsys):
         assert e.code==0
     captured = capsys.readouterr()
     assert captured.out.replace("__main__.py", "db2qthelp.py") == """usage: db2qthelp [-h] [-c FILE] [-i INPUT] [-d DESTINATION] [-a APPNAME]
-                 [-t TEMPLATE] [-g] [-Q QT_PATH] [-X XSLT_PATH] [--version]
+                 [--css-definition CSS_DEFINITION] [--generate-css-definition]
+                 [--qhp-template QHP_TEMPLATE] [--generate-qhp-template]
+                 [-Q QT_PATH] [-X XSLT_PATH] [--version]
 
 a DocBook book to QtHelp project converter
 
@@ -77,9 +79,14 @@ options:
                         Sets the output folder
   -a APPNAME, --appname APPNAME
                         Sets the name of the application
-  -t TEMPLATE, --template TEMPLATE
-                        Defines the QtHelp project template to use
-  -g, --generate        If set, a template is generated
+  --css-definition CSS_DEFINITION
+                        Defines the CSS definition file to use
+  --generate-css-definition
+                        If set, a CSS definition file is generated
+  --qhp-template QHP_TEMPLATE
+                        Defines the QtHelp project (.qhp) template to use
+  --generate-qhp-template
+                        If set, a QtHelp project (.qhp) template is generated
   -Q QT_PATH, --qt-path QT_PATH
                         Sets the path to the Qt binaries
   -X XSLT_PATH, --xslt-path XSLT_PATH

@@ -39,18 +39,32 @@ def test_main_errors__missing_input(capsys, tmp_path):
     assert pname(captured.err) == """db2qthelp: error: did not find input 'foo.xml'
 """
 
-def test_main_errors__missing_template(capsys, tmp_path):
+def test_main_errors__missing_qhp_template(capsys, tmp_path):
     """Generates a template using the short option"""
     copy_files(tmp_path, ["tstdoc1.xml"])
     try:
-        db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "-t", "foo.qhp"])
+        db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "--qhp-template", "foo.qhp"])
         assert False # pragma: no cover
     except SystemExit as e:
         assert type(e)==type(SystemExit())
         assert e.code==2
     captured = capsys.readouterr()
     assert captured.out == ""
-    assert pname(captured.err) == """db2qthelp: error: did not find template file 'foo.qhp'; you may generate one using the option -g
+    assert pname(captured.err) == """db2qthelp: error: did not find QtHelp project (.qhp) template file 'foo.qhp'; you may generate one using the option --generate-qhp-template
+"""
+
+def test_main_errors__missing_css_definition(capsys, tmp_path):
+    """Generates a template using the short option"""
+    copy_files(tmp_path, ["tstdoc1.xml"])
+    try:
+        db2qthelp.main(["-i", str(tmp_path / "tstdoc1.xml"), "--css-definition", "foo.css"])
+        assert False # pragma: no cover
+    except SystemExit as e:
+        assert type(e)==type(SystemExit())
+        assert e.code==2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert pname(captured.err) == """db2qthelp: error: did not find CSS definition file 'foo.css'; you may generate one using the option --generate-css-definition
 """
 
 def test_main_errors__no_xsltproc(capsys, tmp_path):
