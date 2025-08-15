@@ -25,11 +25,11 @@ import db2qthelp
 
 
 # --- test functions ------------------------------------------------
-def test_main_generate_tpl__short(capsys, tmp_path):
-    """Generates a template using the short option"""
+def test_main_generate_qhp_template(capsys, tmp_path):
+    """Generates a qhp template"""
     p1 = tmp_path / "test.qhp"
     try:
-        db2qthelp.main(["-g", "-t", str(p1)])
+        db2qthelp.main(["--generate-qhp-template", "--qhp-template", str(p1)])
         assert False # pragma: no cover
     except SystemExit as e:
         assert type(e)==type(SystemExit())
@@ -39,16 +39,16 @@ def test_main_generate_tpl__short(capsys, tmp_path):
     assert captured.out.replace("__main__.py", "db2qthelp.py") == f"Written qhp template to '{str(p1)}'\n"
 
 
-def test_main_generate_tpl__long(capsys, tmp_path):
-    """Generates a template using the long option"""
-    p1 = tmp_path / "test.qhp"
+def test_main_generate_css_definition(capsys, tmp_path):
+    """Generates a css definition"""
+    p1 = tmp_path / "test.css"
     try:
-        db2qthelp.main(["--generate", "--template", str(p1)])
+        db2qthelp.main(["--generate-css-definition", "--css-definition", str(p1)])
         assert False # pragma: no cover
     except SystemExit as e:
         assert type(e)==type(SystemExit())
         assert e.code==0
-    assert p1.read_text() == db2qthelp.QHP_TEMPLATE
+    assert p1.read_text() == db2qthelp.CSS_DEFINITION
     captured = capsys.readouterr()
-    assert captured.out.replace("__main__.py", "db2qthelp.py") == f"Written qhp template to '{str(p1)}'\n"
+    assert captured.out.replace("__main__.py", "db2qthelp.py") == f"Written css definition to '{str(p1)}'\n"
 

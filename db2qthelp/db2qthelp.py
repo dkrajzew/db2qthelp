@@ -32,7 +32,7 @@ from typing import List
 
 
 # --- variables and constants -----------------------------------------------
-CSS_TEMPLATE = """
+CSS_DEFINITION = """
 <style>
 body {
  margin: 0;
@@ -98,16 +98,18 @@ QCHP = """<?xml version="1.0" encoding="UTF-8"?>
 
 # --- functions -------------------------------------------------------------
 class Db2QtHelp:
-    def __init__(self, qt_path : str, xsltproc_path : str, qhp_template : str):
+    def __init__(self, qt_path : str, xsltproc_path : str, css_definition : str, qhp_template : str):
         """Contructor
 
         Args:
             qt_path (str): Path to the Qt binaries
-            xslt_path (str): Path to the xsltproc binary
+            xsltproc_path (str): Path to the xsltproc binary
+            css_definition (str): CSS definition to use
             qhp_template (str): Template for the .qhp file
         """
         self._qt_path = qt_path
         self._xsltproc_path = xsltproc_path
+        self._css_definition = css_definition if css_definition is not None else CSS_DEFINITION
         self._qhp_template = qhp_template if qhp_template is not None else QHP_TEMPLATE
 
 
@@ -218,7 +220,7 @@ class Db2QtHelp:
         subs[0] = re.sub(r'<a href="#([^"]*)">([^<]*)</a>', r'<a href="\1.html">\2</a>', subs[0])
         subs[0] = re.sub(r'<a class="ulink" href="#([^"]*)">([^<]*)</a>', r'<a class="ulink" href="\1.html">\2</a>', subs[0])
         # write the document part as document
-        subs[0] = "<html><head>" + CSS_TEMPLATE + "</head><body>" + subs[0] + "</body></html>"
+        subs[0] = "<html><head>" + self._css_definition + "</head><body>" + subs[0] + "</body></html>"
         with open(dst_folder + f"/{db_id}.html", "w", encoding="utf-8") as fdo:
             fdo.write(subs[0])
         if len(subs)>1:
@@ -299,6 +301,8 @@ class Db2QtHelp:
             with open(file) as fd:
                 html = fd.read()
             html = self.patch_links(html, app_name, files)
+            title_end = html.find("</title>") + 8
+            html = html[:title_end] + self._css_definition + html[title_end:]
             title = self._get_title(html)
             pages.append([filename, title])
 
@@ -482,19 +486,28 @@ def main(arguments : List[str] = None) -> int:
     parser.add_argument("-i", "--input", dest="input", default=None, help="Defines the DocBook HTML document to parse")
     parser.add_argument("-d", "--destination", dest="destination", default="qtdoc", help="Sets the output folder")
     parser.add_argument("-a", "--appname", dest="appname", default="na", help="Sets the name of the application")
-    parser.add_argument("-t", "--template", dest="template", default=None, help="Defines the QtHelp project template to use")
-    parser.add_argument("-g", "--generate", dest="generate", action="store_true", default=False, help="If set, a template is generated")
+    parser.add_argument("--css-definition", dest="css_definition", default=None, help="Defines the CSS definition file to use")
+    parser.add_argument("--generate-css-definition", dest="generate_css_definition", action="store_true", default=False, help="If set, a CSS definition file is generated")
+    parser.add_argument("--qhp-template", dest="qhp_template", default=None, help="Defines the QtHelp project (.qhp) template to use")
+    parser.add_argument("--generate-qhp-template", dest="generate_qhp_template", action="store_true", default=False, help="If set, a QtHelp project (.qhp) template is generated")
     parser.add_argument("-Q", "--qt-path", dest="qt_path", default="", help="Sets the path to the Qt binaries")
     parser.add_argument("-X", "--xslt-path", dest="xslt_path", default="", help="Sets the path to xsltproc")
     parser.add_argument('--version', action='version', version='%(prog)s 0.2.0')
     parser.set_defaults(**defaults)
     args = parser.parse_args(remaining_argv)
-    # - generate the template and quit, if wished
-    if args.generate:
-        template_name = args.template if args.template is not None else "template.qhp"
+    # - generate the css template and quit, if wished
+    if args.generate_css_definition:
+        template_name = args.css_definition if args.css_definition is not None else "template.css"
+        with open(template_name, "w", encoding="utf-8") as fdo:
+            fdo.write(CSS_DEFINITION)
+        print (f"Written css definition to '{template_name}'")
+        sys.exit(0)
+    # - generate the qhp template and quit, if wished
+    if args.generate_qhp_template:
+        template_name = args.qhp_template if args.qhp_template is not None else "template.qhp"
         with open(template_name, "w", encoding="utf-8") as fdo:
             fdo.write(QHP_TEMPLATE)
-        print (f"Written qhp template to '{args.template}'")
+        print (f"Written qhp template to '{template_name}'")
         sys.exit(0)
     # check
     errors = []
@@ -504,21 +517,26 @@ def main(arguments : List[str] = None) -> int:
         errors.append("unrecognized input extension '{os.path.splitext(args.input)[1]}'")
     elif not os.path.exists(args.input):
         errors.append(f"did not find input '{args.input}'")
-    if args.template is not None and not os.path.exists(args.template):
-        errors.append(f"did not find template file '{args.template}'; you may generate one using the option -g")
+    if args.qhp_template is not None and not os.path.exists(args.qhp_template):
+        errors.append(f"did not find QtHelp project (.qhp) template file '{args.qhp_template}'; you may generate one using the option --generate-qhp-template")
+    if args.css_definition is not None and not os.path.exists(args.css_definition):
+        errors.append(f"did not find CSS definition file '{args.css_definition}'; you may generate one using the option --generate-css-definition")
     if len(errors)!=0:
         for e in errors:
             print(f"db2qthelp: error: {e}", file=sys.stderr)
         raise SystemExit(2)
     # get settings
-    template = None
-    if args.template is not None:
-        with open(args.template) as fdi:
-            template = fdi.read()
+    qhp_template = None
+    if args.qhp_template is not None:
+        with open(args.qhp_template) as fdi:
+            qhp_template = fdi.read()
+    css_definition = None
+    if args.css_definition is not None:
+        with open(args.css_definition) as fdi:
+            css_definition = fdi.read()
     # process
     ret = 0
-    db2qthelp = Db2QtHelp(args.qt_path, args.xslt_path, template)
-    #db2qthelp.process(args.input, src_folder, args.destination, args.appname)
+    db2qthelp = Db2QtHelp(args.qt_path, args.xslt_path, css_definition, qhp_template)
     try:
         db2qthelp.process(args.input, args.destination, args.appname)
     except Exception as e:
