@@ -16,7 +16,8 @@ theme:
 nav:
     - Home: index.md
     - Installation: install.md
-    - Usage: cmd.md
+    - Usage: usage.md
+    - Man Page: cmd.md
     - Links: links.md
     - API: api.md
     - ChangeLog: changes.md
