@@ -201,13 +201,10 @@ class Db2QtHelp:
             html (str): The (string) content of the DocBook book section or appendix
             dst_folder (str): The folder to write the section into
             pages (List[Tuple[str, str]]): The list of HTML sections to fill
-            fdo_content (file): The content output file
             level (int): intendation level
         """
         db_id = self._get_id(html)
         name = self._get_name(html)
-        #indent = " "*(level*3)
-        #fdo_content.write(indent + f"<li><a href=\"{db_id}.html\">{name}</a></li>\n")
         pages.append([f"{db_id}.html", name])
         subs = html.split(f"<div class=\"sect{level}\">")
         if subs[0].rfind("</div>")>=len(subs[0])-6:
@@ -225,7 +222,6 @@ class Db2QtHelp:
                     continue
                 sub = sub[:sub.rfind("</div>")]
                 self._write_sections_recursive(sub, dst_folder, pages, level+1)
-            #fdo_content.write(indent + "</ul>\n")
 
 
     def _process_single(self, source : str, dst_folder : str, pages : List[Tuple[str, str]], files : Set[str], app_name : str) -> None:
@@ -327,30 +323,6 @@ class Db2QtHelp:
             level -= 1
         return toc
 
-    """
-    def build_toc_list(self, pages):
-        toc = ""
-        level = 0
-        for ie,e in enumerate(pages):
-            filename = e[0]
-            title = e[1]
-            nlevel = len(e[2])
-            if nlevel>level:
-                indent = " "*(level*3)
-                toc += indent + "<ul>\n"
-            while ie!=0 and nlevel<level:
-                indent = " "*(level*3)
-                toc += indent + "</ul>\n"
-                level -= 1
-            level = nlevel
-            indent = " "*(level*3)
-            toc += indent + f"<li><a href=\"{filename}.html\">{title}</a></li>\n"
-        while level>0:
-            indent = " "*(level*3)
-            toc += indent + "</ul>\n"
-            level -= 1
-        return toc
-    """
 
     def process(self, source : str, dst_folder : str, app_name : str) -> None:
         """Performs the conversion
@@ -401,13 +373,6 @@ class Db2QtHelp:
             page.append(chapter)
             max_depth = max(len(chapter), max_depth)
         pages.sort(key = lambda x: expand_chapter(x[2], max_depth))
-        #
-        """
-        with open(f"{dst_folder}/toc.html", "w", encoding="utf-8") as fdo_content:
-           fdo_content.write("<html><head>" + self._css_definition + "</head><body>\n")
-           fdo_content.write(self.build_toc_list(pages))
-           fdo_content.write("</body></html>\n")
-        """
         #
         toc = self.build_toc_sections(pages)
         keywords = "\n".join(" "*12 + f"<keyword name=\"{page[1]}\" ref=\"./{page[0]}\"/>" for page in pages)
