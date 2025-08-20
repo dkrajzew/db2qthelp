@@ -292,7 +292,7 @@ class Db2QtHelp:
             title = self._get_title(html)
             pages.append([filename, title])
             _, filename = os.path.split(file)
-            with open(os.path.join(dst_folder, filename), "w", encoding="utf-8") as fd:
+            with open(os.path.join(dst_folder, filename), "w", encoding="iso 8859-1") as fd:
                 fd.write(html)
 
 
@@ -393,10 +393,10 @@ class Db2QtHelp:
         keywords = "\n".join(" "*12 + f"<keyword name=\"{page[1]}\" ref=\"./{page[0]}\"/>" for page in pages)
         # read template, write extended by collected data
         path = f"{dst_folder}/{app_name}"
-        with open(path + ".qhp", "w", encoding="utf-8") as fdo:
+        with open(path + ".qhp", "w", encoding="iso 8859-1") as fdo:
             fdo.write(self._qhp_template.replace("%toc%", toc).replace("%keywords%", keywords).replace("%appname%", app_name))
         # generate qhcp
-        with open(path + ".qhcp", "w", encoding="utf-8") as fdo:
+        with open(path + ".qhcp", "w", encoding="iso 8859-1") as fdo:
             fdo.write(QCHP.replace("%appname%", app_name))
         # generate QtHelp
         os.system(f"{os.path.join(self._qt_path, 'qhelpgenerator')} {path}.qhp -o {path}.qch")
