@@ -363,12 +363,15 @@ class Db2QtHelp:
                 self._process_single(source, dst_folder, pages, files, app_name)
             elif source.endswith(".xml"):
                 print(f"Processing docboook '{source}'")
+                tmp_dir = "_tmp_db2qthelp_dir"
+                os.makedirs(tmp_dir, exist_ok=True)
                 print("... generating chunked HTML")
-                ret = self._generate_html(source, dst_folder)
+                ret = self._generate_html(source, tmp_dir)
                 if ret!=0:
                     raise ValueError(f"xsltproc failed with ret={ret}")
                 print("... processing chunked HTML")
-                self._process_chunked(dst_folder, pages, files, app_name, dst_folder)
+                self._process_chunked(tmp_dir, pages, files, app_name, dst_folder)
+                shutil.rmtree(tmp_dir, ignore_errors=True)
             else:
                 raise ValueError(f"unsupported file extension of '{source}'")
         else:
