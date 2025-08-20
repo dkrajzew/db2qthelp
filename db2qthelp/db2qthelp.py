@@ -296,14 +296,30 @@ class Db2QtHelp:
                 fd.write(html)
 
 
-    def _copy_files(self, files, source, dst_folder):
+    def _copy_files(self, files : Set[str], source : str, dst_folder : str) -> None:
+        """Copies referenced files into the destination folder
+
+        Args:
+            files (Set[str]): The files to compy
+            source (str): The origin folder
+            folder (str): The destination folder
+        """
         base_path = source if os.path.isdir(source) else os.path.split(source)[0]
         for file in files:
             _, filename = os.path.split(file)
             shutil.copy(os.path.join(base_path, file), f"{dst_folder}/{filename}")
 
 
-    def build_toc_sections(self, pages):
+    def build_toc_sections(self, pages : List[Tuple[str, str, List[int]]]) -> str:
+        """Generates a hierarchical list of pages to be embedded in the toc-section
+        of the qhp-file.
+
+        Args:
+            pages (List[Tuple[str, str, List[int]]]): The sorted list of pages
+
+        Returns:
+            (str): The pages formatted as toc-sections
+        """
         toc = ""
         level = 1
         for ie,e in enumerate(pages):
@@ -329,7 +345,6 @@ class Db2QtHelp:
 
         Args:
             source (str): The input file or folder
-            src_folder (List[str]): The source folder(s) (where images are located)
             dst_folder (str): The destination folder (where the documentation is built)
             app_name (str): The name of the application
         """
@@ -418,6 +433,9 @@ def main(arguments : List[str] = None) -> int:
 
     Args:
         arguments (List[str]): The command line arguments, parsed as options using OptionParser.
+
+    Returns:
+        (int): The return code
 
     Options
     -------
