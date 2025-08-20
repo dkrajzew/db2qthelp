@@ -385,7 +385,10 @@ class Db2QtHelp:
             return ch
         max_depth = 0
         for page in pages:
-            chapter = [int(x) for x in page[1].split()[0].split(".")[:-1]]
+            if page[1][0]=='A':
+                chapter = [ord(page[1].split()[1][0]) + 1000]
+            else:
+                chapter = [int(x) for x in page[1].split()[0].split(".")[:-1]]
             if len(chapter)==0:
                 chapter = [0]
             page.append(chapter)
