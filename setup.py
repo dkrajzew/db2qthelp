@@ -43,7 +43,7 @@ setuptools.setup(
     },
     license='BSD',
     packages = [""],
-    package_dir = { "": "db2qthelp" },
+    package_dir = { "": "db2qthelp", "data": "db2qthelp/data" },
     entry_points = {
         'console_scripts': [
             'db2qthelp = db2qthelp:script_run'
@@ -54,9 +54,7 @@ setuptools.setup(
         "Development Status :: 2 - Pre-Alpha",
         "Environment :: Console",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",

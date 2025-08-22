@@ -253,10 +253,11 @@ class Db2QtHelp:
             folder (str): A (temporary) folder to store the xsltproc output to
         """
         shutil.rmtree(folder, ignore_errors=True)
+        chunk_xsl_path = os.path.join(os.path.split(__file__)[0], "data", "chunk_html.xsl")
         try:
             result = subprocess.run([os.path.join(self._xsltproc_path, 'xsltproc'),
                 "--stringparam", "base.dir", folder,
-                "chunk_html.xsl", source], check = True)
+                chunk_xsl_path, source], check = True)
         except subprocess.CalledProcessError:
             raise RuntimeError("could not invoke xsltproc...")
         except FileNotFoundError:
