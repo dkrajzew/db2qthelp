@@ -25,8 +25,6 @@ import glob
 import re
 import argparse
 import configparser
-import io
-import tempfile
 import subprocess
 from typing import List, Set, Tuple
 
@@ -181,7 +179,7 @@ class Db2QtHelp:
             doc = doc.replace(src, nsrc)
             files.add(src)
         return doc
-        
+
 
     def _write_sections_recursive(self, html : str, dst_folder : str, pages : List[Tuple[str, str]], level : int) -> None:
         """Writes the given section and it's sub-sections recursively.
@@ -302,7 +300,7 @@ class Db2QtHelp:
         Args:
             files (Set[str]): The files to compy
             source (str): The origin folder
-            folder (str): The destination folder
+            dst_folder (str): The destination folder
         """
         base_path = source if os.path.isdir(source) else os.path.split(source)[0]
         for file in files:
