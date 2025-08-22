@@ -1,18 +1,18 @@
 # Usage
 
-__db2qthelp__ is implemented in [Python](https://www.python.org/). It is started on the command line.
+**db2qthelp** is implemented in [Python](https://www.python.org/). It is started on the command line.
 
 
 ## Outline
 
 [DocBook](https://docbook.org/) is an XML-based document format that focusses on structure and semantics. [DocBook](https://docbook.org/)'s book template is very appropriate for writing user documentation files. You may convert them into HTML files or PDFs using open (free) tools like [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) and / [Apache FOP](https://xmlgraphics.apache.org/fop/).
 
-Now, when building Qt applications, what about reusing your user documentation for the applications' help pages? This is what __db2qthelp__ does.
+Now, when building Qt applications, what about reusing your user documentation for the applications' help pages? This is what **db2qthelp** does.
 
 
 ## Prerequisites
 
-__db2qthelp__ requires some prerequisites. In the most convenient use case, __db2qthelp__ calls  [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) to convert your [DocBook](https://docbook.org/) book document into a set of HTML files, first. Then, it processes those files by embedding CSS styles and collects them for being listed in the resulting [Qt](https://www.qt.io/) Help. It then runs [Qt](https://www.qt.io/) Help processors for finally obtaining [Qt](https://www.qt.io/) Help pages. This is all done by just running:
+**db2qthelp** requires some prerequisites. In the most convenient use case, **db2qthelp** calls  [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) to convert your [DocBook](https://docbook.org/) book document into a set of HTML files, first. Then, it processes those files by embedding CSS styles and collects them for being listed in the resulting [Qt](https://www.qt.io/) Help. It then runs [Qt](https://www.qt.io/) Help processors for finally obtaining [Qt](https://www.qt.io/) Help pages. This is all done by just running:
 
 ```console
 db2qthelp.py -i userdocs.xml
@@ -28,7 +28,7 @@ set PATH=%PATH%;D:\Qt\5.15.2\msvc2019\bin;D:\docbook\libxslt-1.1.26.win32\bin
 
 Alternatively, you may pass the paths to **db2qthelp** using the options __--xslt-path _&lt;XSLT_PATH&gt;___ (__-X _&lt;XSLT_PATH&gt;___) and __--qt-path _&lt;QT_BINARIES_PATH&gt;___ (__-Q _&lt;QT_BINARIES_PATH&gt;___).
 
-In addition, __db2qthelp__ uses custom xsl (XML style sheets, or [Extensible Stylesheet Language](https://de.wikipedia.org/wiki/Extensible_Stylesheet_Language) files) for building documents. As such, you have to let the system know where your xsl are located by setting the ```XML_CATALOG_FILES``` variable used by [xsltproc](https://gitlab.gnome.org/GNOME/libxslt):
+In addition, **db2qthelp** uses custom xsl (XML style sheets, or [Extensible Stylesheet Language](https://de.wikipedia.org/wiki/Extensible_Stylesheet_Language) files) for building documents. As such, you have to let the system know where your xsl are located by setting the ```XML_CATALOG_FILES``` variable used by [xsltproc](https://gitlab.gnome.org/GNOME/libxslt):
 
 ```console
 set XML_CATALOG_FILES=D:\docbook\docbook-xsl-1.79.2\catalog.xml
@@ -43,26 +43,27 @@ As given above, you may directly convert your [DocBook](https://docbook.org/) bo
 db2qthelp.py -i userdocs.xml
 ```
 
-__db2qthelp__ recognises that it's a [DocBook](https://docbook.org/) book by the extension - ```.xml```.
+**db2qthelp** recognises that it's a [DocBook](https://docbook.org/) book by the extension - ```.xml```.
 
-Using this call, __db2qthelp__ will write the intermediate files and the results into the folder ```qtdocs```. A built-in CSS definition will be used and the application's name within the [Qt](https://www.qt.io/) Help files will be set to ```na```. You will need this name when using the [Qt](https://www.qt.io/) Help filter in your application.
+Using this call, **db2qthelp** will write the intermediate files and the results into the folder ```qtdocs```. A built-in CSS definition will be used and the application's name within the [Qt](https://www.qt.io/) Help files will be set to ```na```. You will need this name when using the [Qt](https://www.qt.io/) Help filter in your application.
 
 Of course, you may change this. The application name can be set using the option __--appname _&lt;APP_NAME&gt;___. You may let **db2qthelp** use your own CSS definition using the option __--css-definition _&lt;CSS_FILE&gt;___. You may as well export the default one using the option **--generate-css-definition** - the filename it will be stored under is the one given using __--css-definition__ or ```template.css``` if no name is set.
 
 Same for the qhp file used for building [Qt](https://www.qt.io/) Help files. You may export the default one using **--generate-qhp-template** and use your own one by setting the option __--qhp-template _&lt;APP_NAME&gt;___. Again, the filename used when writing the template is either ```template.qhp``` or the one you set using __--qhp-template__.
 
+Per default, **db2qthelp** will write the generated files to the folder qtdocs. You may choose a different output folder using the __--destination _&lt;FOLDER&gt;___ (or __-d _&lt;FOLDER&gt;___ for short) option.
 
 ## Alternatives
 
-The first version of __db2qthelp__ did not convert the [DocBook](https://docbook.org/) document, but processed HTML obtained by running the chunking HTML exporter with [xsltproc](https://gitlab.gnome.org/GNOME/libxslt). This possibility still exists, as well as using a single HTML file as input.
+The first version of **db2qthelp** did not convert the [DocBook](https://docbook.org/) document, but processed HTML obtained by running the chunking HTML exporter with [xsltproc](https://gitlab.gnome.org/GNOME/libxslt). This possibility still exists, as well as using a single HTML file as input.
 
-When running __db2qthelp__ with a HTML file as input as shown below, it will process this file and generate according [Qt](https://www.qt.io/) Help files. __db2qthelp__ will assume that the input is a single HTML file if it has the extension  ```.html```.
+When running **db2qthelp** with a HTML file as input as shown below, it will process this file and generate according [Qt](https://www.qt.io/) Help files. **db2qthelp** will assume that the input is a single HTML file if it has the extension  ```.html```.
 
 ```console
 db2qthelp.py -i userdocs.html
 ```
 
-When the value of the input-option points to a folder, __db2qthelp__ will assume that this folder contains chunked HTML output generated by [xsltproc](https://gitlab.gnome.org/GNOME/libxslt). In this case, all HTML files within this folder will be collected and processed.
+When the value of the input-option points to a folder, **db2qthelp** will assume that this folder contains chunked HTML output generated by [xsltproc](https://gitlab.gnome.org/GNOME/libxslt). In this case, all HTML files within this folder will be collected and processed.
 
 
 ## Configuration files
@@ -75,3 +76,14 @@ input=userdocs.xml
 xslt-path=D:\docbook\libxslt-1.1.26.win32\bin
 qt-path=D:\Qt\5.15.2\msvc2019\bin
 ```
+
+
+## Docbook customization
+
+**db2qthelp** uses an own Docbbok XML style sheet (xsl) named ```single_html.xsl``` located in the ```data``` sub-folder.
+
+Most of the values should be kept as-are, but you may want to adapt it to your needs anyway. There is no option for using an own style sheet, yet.
+
+
+
+
