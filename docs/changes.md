@@ -1,6 +1,6 @@
 # ChangeLog for db2qthelp
 
-## db2qthelp-0.4 (to come)
+## db2qthelp-0.4.0 (to come)
 
 * code
     * added support for direct processing of [DocBook](https://docbook.org/) books

@@ -405,7 +405,7 @@ class Db2QtHelp:
             fdo.write(QCHP.replace("%appname%", app_name))
         # generate QtHelp
         os.system(f"{os.path.join(self._qt_path, 'qhelpgenerator')} {path}.qhp -o {path}.qch")
-        os.system(f"{os.path.join(self._qt_path, 'qcollectiongenerator')} {path}.qhcp -o {path}.qhc")
+        os.system(f"{os.path.join(self._qt_path, 'qhelpgenerator')} {path}.qhcp -o {path}.qhc")
 
 
 def main(arguments : List[str] = None) -> int:
