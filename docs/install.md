@@ -88,7 +88,7 @@ On Ubuntu Linux you should be able to install [xsltproc](https://gitlab.gnome.or
 sudo apt-get install xsltproc
 ```
 
-On Windows, I got my [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) and need libraries from [Igor Zlatkovic's website](https://www.zlatkovic.com/libxml.en.html). Please note that you need libxslt, iconc, libxml2, and zlib. I collected them in a single folder...
+On Windows, I got my [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) and need libraries from [Igor Zlatkovic's website](https://www.zlatkovic.com/libxml.en.html). Please note that you need libxslt, iconc, libxml2, and zlib. I collected them in a single folder&#8230;
 
 ## Some further notes
 

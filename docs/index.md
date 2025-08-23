@@ -27,7 +27,7 @@ Given that your [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) together with
 db2qthelp.py -i userdocs.xml
 ```
 
-That's all &#x1F603;. You'll get a .qch and a .qhc file you may use directly in your [Qt](https://www.qt.io/) Help widget...
+That&#39;s all &#x1F603;. You&#39;ll get a .qch and a .qhc file you may use directly in your [Qt](https://www.qt.io/) Help widget&#8230;
 
 ## Documentation
 

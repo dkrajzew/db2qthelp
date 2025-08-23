@@ -7,7 +7,7 @@
 
 [DocBook](https://docbook.org/) is an XML-based document format that focusses on structure and semantics. [DocBook](https://docbook.org/)'s book template is very appropriate for writing user documentation files. You may convert them into HTML files or PDFs using open (free) tools like [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) and / [Apache FOP](https://xmlgraphics.apache.org/fop/).
 
-Now, when building Qt applications, what about reusing your user documentation for the applications' help pages? This is what **db2qthelp** does.
+Now, when building Qt applications, what about reusing your user documentation for the applications&#39; help pages? This is what **db2qthelp** does.
 
 
 ## Prerequisites
@@ -24,7 +24,7 @@ Yet, for doing this, your system should be capable to call [xsltproc](https://gi
 set PATH=%PATH%;D:\Qt\5.15.2\msvc2019\bin;D:\docbook\libxslt-1.1.26.win32\bin
 ```
 
-(of course, the path depend on where you have stored the respective binaries; and - this is for Windows)
+(of course, the path depend on where you have stored the respective binaries; and &#8212; this is for Windows)
 
 Alternatively, you may pass the paths to **db2qthelp** using the options __--xslt-path _&lt;XSLT_PATH&gt;___ (__-X _&lt;XSLT_PATH&gt;___) and __--qt-path _&lt;QT_BINARIES_PATH&gt;___ (__-Q _&lt;QT_BINARIES_PATH&gt;___).
 
@@ -43,11 +43,11 @@ As given above, you may directly convert your [DocBook](https://docbook.org/) bo
 db2qthelp.py -i userdocs.xml
 ```
 
-**db2qthelp** recognises that it's a [DocBook](https://docbook.org/) book by the extension - ```.xml```.
+**db2qthelp** recognises that it&#39;s a [DocBook](https://docbook.org/) book by the extension &#8212; ```.xml```.
 
-Using this call, **db2qthelp** will write the intermediate files and the results into the folder ```qtdocs```. A built-in CSS definition will be used and the application's name within the [Qt](https://www.qt.io/) Help files will be set to ```na```. You will need this name when using the [Qt](https://www.qt.io/) Help filter in your application.
+Using this call, **db2qthelp** will write the intermediate files and the results into the folder ```qtdocs```. A built-in CSS definition will be used and the application&#39;s name within the [Qt](https://www.qt.io/) Help files will be set to ```na```. You will need this name when using the [Qt](https://www.qt.io/) Help filter in your application.
 
-Of course, you may change this. The application name can be set using the option __--appname _&lt;APP_NAME&gt;___. You may let **db2qthelp** use your own CSS definition using the option __--css-definition _&lt;CSS_FILE&gt;___. You may as well export the default one using the option **--generate-css-definition** - the filename it will be stored under is the one given using __--css-definition__ or ```template.css``` if no name is set.
+Of course, you may change this. The application name can be set using the option __--appname _&lt;APP_NAME&gt;___. You may let **db2qthelp** use your own CSS definition using the option __--css-definition _&lt;CSS_FILE&gt;___. You may as well export the default one using the option **--generate-css-definition** &#8212; the filename it will be stored under is the one given using __--css-definition__ or ```template.css``` if no name is set.
 
 Same for the qhp file used for building [Qt](https://www.qt.io/) Help files. You may export the default one using **--generate-qhp-template** and use your own one by setting the option __--qhp-template _&lt;APP_NAME&gt;___. Again, the filename used when writing the template is either ```template.qhp``` or the one you set using __--qhp-template__.
 
