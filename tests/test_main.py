@@ -49,7 +49,7 @@ def test_main_version(capsys):
         assert type(e)==type(SystemExit())
         assert e.code==0
     captured = capsys.readouterr()
-    assert pname(captured.out) == """db2qthelp 0.4.0
+    assert pname(captured.out) == """db2qthelp 0.2.0
 """
     assert captured.err == ""
 
