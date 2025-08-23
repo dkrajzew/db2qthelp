@@ -5,13 +5,14 @@
 __author__     = "Daniel Krajzewicz"
 __copyright__  = "Copyright 2025, Daniel Krajzewicz"
 __credits__    = ["Daniel Krajzewicz"]
-__license__    = "GPL"
-__version__    = "0.4.4"
+__license__    = "GPLv3"
+__version__    = "0.2.0"
 __maintainer__ = "Daniel Krajzewicz"
 __email__      = "daniel@krajzewicz.de"
 __status__     = "Development"
 # ===========================================================================
-# - https://github.com/dkrajzew/gresiblos
+# - https://github.com/dkrajzew/db2qthelp
+# - http://www.krajzewicz.de/docs/db2qthelp/index.html
 # - http://www.krajzewicz.de
 # ===========================================================================
 
@@ -37,7 +38,7 @@ def pname(string, path="<DIR>"):
     return string.replace("__main__.py", "db2qthelp").replace("pytest", "db2qthelp").replace("optional arguments", "options")
 
 def tread(filepath):
-    return filepath.read_text()
+    return filepath.read_text(encoding="ISO8859-1")
 
 #def bread(filepath):
 #    return filepath.read_bytes()
