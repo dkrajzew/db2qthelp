@@ -29,7 +29,7 @@ The options **--xslt-path *&lt;XSLT_PATH&gt;*** (or **-X *&lt;XSLT_PATH&gt;*** f
 
 Per default, **db2qthelp** will write the generated files to the folder qtdocs. You may choose a different output folder using the __--destination _&lt;FOLDER&gt;___ (or __-d _&lt;FOLDER&gt;___ for short) option.
 
-**db2qthelp** options can be stored in a configuration file whic is read using the option **--config *&lt;CONFIG_FILE&gt;*** (or **-c *&lt;CONFIG_FILE&gt;*** for short). The option **--help** prints the help screen. The option **--version** prints the version information.
+**db2qthelp** options can be stored in a configuration file which is read using the option **--config *&lt;CONFIG_FILE&gt;*** (or **-c *&lt;CONFIG_FILE&gt;*** for short). The option **--help** prints the help screen. The option **--version** prints the version information.
 
 
 ## Examples

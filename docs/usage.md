@@ -18,7 +18,7 @@ Now, when building Qt applications, what about reusing your user documentation f
 db2qthelp.py -i userdocs.xml
 ```
 
-Yet, for doing this, your system should be capable to call [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) and qhelpgenerator / qcollectiongenerator directly, so you have to add the respective folders:
+Yet, for doing this, your system should be capable to call [xsltproc](https://gitlab.gnome.org/GNOME/libxslt) and qhelpgenerator directly, so you have to add the respective folders:
 
 ```console
 set PATH=%PATH%;D:\Qt\5.15.2\msvc2019\bin;D:\docbook\libxslt-1.1.26.win32\bin

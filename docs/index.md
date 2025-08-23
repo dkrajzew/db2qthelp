@@ -62,4 +62,4 @@ that generates in-app help pages. __db2qthelp__ does this.
 
 ## Status &amp; Contributing
 
-**db2qthelp** is in an early development stage. Yet, it is not my major project, so extensions and new versions may take seom time. If you need something or have a comment, you may drop me a mail or [add an issue](https://github.com/dkrajzew/db2qthelp/issues).
+**db2qthelp** is in an early development stage. Yet, it is not my major project, so extensions and new versions may take some time. If you need something or have a comment, you may drop me a mail or [add an issue](https://github.com/dkrajzew/db2qthelp/issues).
