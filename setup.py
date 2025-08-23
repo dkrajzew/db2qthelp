@@ -5,7 +5,7 @@
 __author__     = "Daniel Krajzewicz"
 __copyright__  = "Copyright 2022-2025, Daniel Krajzewicz"
 __credits__    = ["Daniel Krajzewicz"]
-__license__    = "BSD"
+__license__    = "GPLv3"
 __version__    = "0.4"
 __maintainer__ = "Daniel Krajzewicz"
 __email__      = "daniel@krajzewicz.de"
@@ -41,7 +41,7 @@ setuptools.setup(
         'Tracker': 'https://github.com/dkrajzew/db2qthelp/issues',
         'Discussions': 'https://github.com/dkrajzew/db2qthelp/discussions',
     },
-    license='BSD',
+    license='GPLv3',
     packages = [""],
     package_dir = { "": "db2qthelp", "data": "db2qthelp/data" },
     entry_points = {

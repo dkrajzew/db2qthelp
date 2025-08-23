@@ -1,4 +1,4 @@
-[![License: BSD](https://img.shields.io/badge/License-BSD-green.svg)](https://github.com/dkrajzew/db2qthelp/blob/main/LICENSE)
+[![License: GPL](https://img.shields.io/badge/License-GPL-green.svg)](https://github.com/dkrajzew/db2qthelp/blob/main/LICENSE)
 [![PyPI version](https://badge.fury.io/py/db2qthelp.svg)](https://pypi.org/project/db2qthelp/)
 ![test](https://github.com/dkrajzew/db2qthelp/actions/workflows/test.yml/badge.svg)
 [![Downloads](https://static.pepy.tech/badge/db2qthelp)](https://pepy.tech/projects/db2qthelp)
@@ -81,7 +81,7 @@ Or download the [latest release](https://github.com/dkrajzew/db2qthelp/releases/
 
 ## License
 
-**db2qthelp** is licensed under the [BSD license](license.md).
+**db2qthelp** is licensed under the [GPLv3 license](https://raw.githubusercontent.com/dkrajzew/db2qthelp/refs/heads/main/LICENSE).
 
 
 # Examples / Users
@@ -108,6 +108,7 @@ Or download the [latest release](https://github.com/dkrajzew/db2qthelp/releases/
 * docs
     * reworked documentation
     * added automatic [readthedocs](https://db2qthelp.readthedocs.io/) docs building ([![Documentation Status](https://readthedocs.org/projects/db2qthelp/badge/?version=latest)](https://db2qthelp.readthedocs.io/en/latest/?badge=latest))
+* moved to GPLv3
 
 
 ## db2qthelp-0.2 (07.01.2023)

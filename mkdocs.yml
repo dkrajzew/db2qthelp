@@ -29,7 +29,7 @@ nav:
     - Links: links.md
     - API: api.md
     - ChangeLog: changes.md
-    - License (BSD): license.md
+    - License (GPLv3): license.md
     - Legal: legal.md
 
 exclude_docs:

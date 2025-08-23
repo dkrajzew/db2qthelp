@@ -5,7 +5,7 @@ from __future__ import print_function
 __author__     = "Daniel Krajzewicz"
 __copyright__  = "Copyright 2022-2024, Daniel Krajzewicz"
 __credits__    = ["Daniel Krajzewicz"]
-__license__    = "BSD"
+__license__    = "GPLv3"
 __version__    = "0.2.0"
 __maintainer__ = "Daniel Krajzewicz"
 __email__      = "daniel@krajzewicz.de"

@@ -1,4 +1,4 @@
-# ChangeLog for db2qthelp
+# ChangeLog
 
 ## db2qthelp-0.4.0 (to come)
 
@@ -15,6 +15,7 @@
 * docs
     * reworked documentation
     * added automatic [readthedocs](https://db2qthelp.readthedocs.io/) docs building ([![Documentation Status](https://readthedocs.org/projects/db2qthelp/badge/?version=latest)](https://db2qthelp.readthedocs.io/en/latest/?badge=latest))
+* moved to GPLv3
 
 
 ## db2qthelp-0.2 (07.01.2023)

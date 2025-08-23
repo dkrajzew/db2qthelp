@@ -1,4 +1,4 @@
-[![License: BSD](https://img.shields.io/badge/License-BSD-green.svg)](https://github.com/dkrajzew/db2qthelp/blob/main/LICENSE)
+[![License: GPL](https://img.shields.io/badge/License-GPL-green.svg)](https://github.com/dkrajzew/db2qthelp/blob/main/LICENSE)
 [![PyPI version](https://badge.fury.io/py/db2qthelp.svg)](https://pypi.org/project/db2qthelp/)
 ![test](https://github.com/dkrajzew/db2qthelp/actions/workflows/test.yml/badge.svg)
 [![Downloads](https://static.pepy.tech/badge/db2qthelp)](https://pepy.tech/projects/db2qthelp)
@@ -51,7 +51,7 @@ Or download the [latest release](https://github.com/dkrajzew/db2qthelp/releases/
 
 ## License
 
-**db2qthelp** is licensed under the [BSD license](license.md).
+**db2qthelp** is licensed under the [GPLv3 license](license.md).
 
 
 ## Background
