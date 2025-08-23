@@ -233,7 +233,7 @@ class Db2QtHelp:
             app_name (str): The application name
         """
         # read doc
-        with open(source) as fdi:
+        with open(source, encoding="utf-8") as fdi:
             doc = fdi.read()
         doc = self.patch_links(doc, app_name, files)
         # process document
@@ -539,11 +539,11 @@ def main(arguments : List[str] = None) -> int:
     # get settings
     qhp_template = None
     if args.qhp_template is not None:
-        with open(args.qhp_template) as fdi:
+        with open(args.qhp_template, encoding="utf-8") as fdi:
             qhp_template = fdi.read()
     css_definition = None
     if args.css_definition is not None:
-        with open(args.css_definition) as fdi:
+        with open(args.css_definition, encoding="utf-8") as fdi:
             css_definition = fdi.read()
     # process
     ret = 0
