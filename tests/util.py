@@ -33,21 +33,22 @@ from pathlib import Path
 
 
 # --- imports ---------------------------------------------------------------
-def pname(string, path="<DIR>"):
-    string = string.replace(str(path), "<DIR>").replace("\\", "/")
-    return string.replace("__main__.py", "db2qthelp").replace("pytest", "db2qthelp").replace("optional arguments", "options")
+def pname(txt, path="<DIR>"):
+    txt = txt.replace(str(path), "<DIR>").replace("\\", "/")
+    txt = txt.replace("optional arguments", "options")
+    return txt.replace("__main__.py", "db2qthelp").replace("pytest", "db2qthelp")
 
 def tread(filepath):
-    return filepath.read_text(encoding="ISO8859-1")
+    return filepath.read_text(encoding="iso 8859-1")
 
 #def bread(filepath):
 #    return filepath.read_bytes()
 
-def pdirtimename(string, tmp_path):
+def pdirtimename(txt, tmp_path):
     regex = r'([0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]+)?'
-    string = string.replace(str(tmp_path), "<DIR>").replace("\\", "/")
-    string = pname(string)
-    return re.sub(regex, "<DUR>", string)
+    txt = txt.replace(str(tmp_path), "<DIR>").replace("\\", "/")
+    txt = pname(txt)
+    return re.sub(regex, "<DUR>", txt)
 
 def copy_files(tmp_path, files):
     for file in files:

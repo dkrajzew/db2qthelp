@@ -22,6 +22,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.split(__file__)[0], "..", "db2qthelp"))
 import db2qthelp
+from util import pname
 
 
 # --- test functions ------------------------------------------------
@@ -34,7 +35,7 @@ def test_main_empty1(capsys):
         assert type(e)==type(SystemExit())
         assert e.code==2
     captured = capsys.readouterr()
-    assert captured.err.replace("__main__.py", "db2qthelp.py") == """db2qthelp: error: no input file given (use -i <HTML_DOCBOOK>)...
+    assert pname(captured.err) == """db2qthelp: error: no input file given (use -i <HTML_DOCBOOK>)...
 """
     assert captured.out == ""
 
