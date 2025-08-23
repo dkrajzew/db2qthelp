@@ -39,7 +39,7 @@ def pname(txt, path="<DIR>"):
     return txt.replace("__main__.py", "db2qthelp").replace("pytest", "db2qthelp")
 
 def tread(filepath):
-    return filepath.read_text(encoding="iso 8859-1")
+    return filepath.read_text(encoding="utf-8")
 
 #def bread(filepath):
 #    return filepath.read_bytes()

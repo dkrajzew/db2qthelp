@@ -3,6 +3,7 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   version="1.0">
 <xsl:import href="http://cdn.docbook.org/release/xsl/current/html/chunk.xsl"/>
+<xsl:output method="html" encoding="UTF-8" indent="yes" />
 
 <xsl:param name="fop1.extensions" select="1"/>
 <xsl:param name="local.l10n.xml" select="document('')"/>
@@ -28,6 +29,7 @@
 <!-- xsl:param name="chunk.tocs.and.lots" select="1"/ -->
 
 
+<xsl:param name="chunker.output.encoding" select="UTF-8"/>
 <xsl:param name="chapter.autolabel" select="1"/>
 <xsl:param name="section.autolabel" select="1"/>
 <xsl:param name="section.label.includes.component.label" select="1"/>

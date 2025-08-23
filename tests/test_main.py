@@ -49,7 +49,7 @@ def test_main_version(capsys):
         assert type(e)==type(SystemExit())
         assert e.code==0
     captured = capsys.readouterr()
-    assert captured.out.replace("__main__.py", "db2qthelp.py") == """db2qthelp 0.2.0
+    assert pname(captured.out) == """db2qthelp 0.4.0
 """
     assert captured.err == ""
 
@@ -63,7 +63,7 @@ def test_main_help(capsys):
         assert type(e)==type(SystemExit())
         assert e.code==0
     captured = capsys.readouterr()
-    assert captured.out.replace("__main__.py", "db2qthelp.py") == """usage: db2qthelp [-h] [-c FILE] [-i INPUT] [-d DESTINATION] [-a APPNAME]
+    assert pname(captured.out) == """usage: db2qthelp [-h] [-c FILE] [-i INPUT] [-d DESTINATION] [-a APPNAME]
                  [--css-definition CSS_DEFINITION] [--generate-css-definition]
                  [--qhp-template QHP_TEMPLATE] [--generate-qhp-template]
                  [-Q QT_PATH] [-X XSLT_PATH] [--version]

@@ -3,6 +3,7 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   version="1.0">
 <xsl:import href="http://cdn.docbook.org/release/xsl/current/html/docbook.xsl"/>
+<xsl:output method="html" encoding="utf-8" indent="yes" />
 
 <xsl:param name="local.l10n.xml" select="document('')"/>
 

@@ -54,7 +54,7 @@ div.informalequation { text-align: center; font-style: italic; }
 .warning p { background-color: #ffff80; margin: 8px 8px 8px 8px; }
 """
 
-QHP_TEMPLATE = """<?xml version="1.0" encoding="latin1"?>
+QHP_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
 <QtHelpProject version="1.0">
     <namespace>%appname%</namespace>
     <virtualFolder>doc</virtualFolder>
@@ -283,7 +283,7 @@ class Db2QtHelp:
             _, filename = os.path.split(file)
             if filename=="index.html":
                 continue
-            with open(file) as fd:
+            with open(file, encoding="utf-8") as fd:
                 html = fd.read()
             html = self.patch_links(html, app_name, files)
             title_end = html.find("</title>") + 8
@@ -291,7 +291,7 @@ class Db2QtHelp:
             title = self._get_title(html)
             pages.append([filename, title])
             _, filename = os.path.split(file)
-            with open(os.path.join(dst_folder, filename), "w", encoding="iso 8859-1") as fd:
+            with open(os.path.join(dst_folder, filename), "w", encoding="utf-8") as fd:
                 fd.write(html)
 
 
@@ -398,10 +398,10 @@ class Db2QtHelp:
         keywords = "\n".join(" "*12 + f"<keyword name=\"{page[1]}\" ref=\"./{page[0]}\"/>" for page in pages)
         # read template, write extended by collected data
         path = f"{dst_folder}/{app_name}"
-        with open(path + ".qhp", "w", encoding="iso 8859-1") as fdo:
+        with open(path + ".qhp", "w", encoding="utf-8") as fdo:
             fdo.write(self._qhp_template.replace("%toc%", toc).replace("%keywords%", keywords).replace("%appname%", app_name))
         # generate qhcp
-        with open(path + ".qhcp", "w", encoding="iso 8859-1") as fdo:
+        with open(path + ".qhcp", "w", encoding="utf-8") as fdo:
             fdo.write(QCHP.replace("%appname%", app_name))
         # generate QtHelp
         os.system(f"{os.path.join(self._qt_path, 'qhelpgenerator')} {path}.qhp -o {path}.qch")
