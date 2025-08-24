@@ -15,7 +15,7 @@ __db2qthelp__ &mdash; a DocBook book to QtHelp project converter
 
 ## Introduction
 
-__db2qthelp__ converts a [DocBook](https://docbook.org/) [book](https://tdg.docbook.org/tdg/4.5/book.html) to a [QtHelp](https://doc.qt.io/qt-5/qthelp-framework.html) project. It is written in [Python](https://www.python.org/) and started on the command line.
+__db2qthelp__ converts a [DocBook](https://docbook.org/) [book](https://tdg.docbook.org/tdg/4.5/book.html) to a [QtHelp](https://doc.qt.io/archives/qt-5.15/qthelp-framework.html) project. It is written in [Python](https://www.python.org/) and started on the command line.
 
 __db2qthelp__ is in an early stage of development. It works well for me but it may work with my setup only. I try to make it usable nonetheless, so let me know if something does not work. Thanks.
 
