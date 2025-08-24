@@ -211,7 +211,7 @@ class Db2QtHelp:
         subs[0] = re.sub(r'<a href="#([^"]*)">([^<]*)</a>', r'<a href="\1.html">\2</a>', subs[0])
         subs[0] = re.sub(r'<a class="ulink" href="#([^"]*)">([^<]*)</a>', r'<a class="ulink" href="\1.html">\2</a>', subs[0])
         # write the document part as document
-        subs[0] = "<html><head>" + self._css_definition + "</head><body>" + subs[0] + "</body></html>"
+        subs[0] = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>' + self._css_definition + "</head><body>" + subs[0] + "</body></html>"
         with open(dst_folder + f"/{db_id}.html", "w", encoding="utf-8") as fdo:
             fdo.write(subs[0])
         if len(subs)>1:
@@ -286,6 +286,8 @@ class Db2QtHelp:
             with open(file, encoding="utf-8") as fd:
                 html = fd.read()
             html = self.patch_links(html, app_name, files)
+            if html.find('content="text/html; charset=">')>=0:
+                html = html.replace('content="text/html; charset=">', 'content="text/html; charset=UTF-8">')
             title_end = html.find("</title>") + 8
             html = html[:title_end] + self._css_definition + html[title_end:]
             title = self._get_title(html)
