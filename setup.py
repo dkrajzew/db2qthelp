@@ -6,7 +6,7 @@ __author__     = "Daniel Krajzewicz"
 __copyright__  = "Copyright 2022-2025, Daniel Krajzewicz"
 __credits__    = ["Daniel Krajzewicz"]
 __license__    = "GPLv3"
-__version__    = "0.4"
+__version__    = "0.4.0"
 __maintainer__ = "Daniel Krajzewicz"
 __email__      = "daniel@krajzewicz.de"
 __status__     = "Development"
@@ -27,7 +27,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="db2qthelp",
-    version="0.4",
+    version="0.4.0",
     author="dkrajzew",
     author_email="d.krajzewicz@gmail.com",
     description="A DocBook book to QtHelp converter",
