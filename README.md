@@ -93,7 +93,7 @@ Or download the [latest release](https://github.com/dkrajzew/db2qthelp/releases/
 
 # ChangeLog
 
-## db2qthelp-0.4.0 (to come)
+## db2qthelp-0.4.0 (24.08.2025)
 
 * code
     * added support for direct processing of [DocBook](https://docbook.org/) books
