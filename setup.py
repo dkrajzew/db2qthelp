@@ -42,8 +42,9 @@ setuptools.setup(
         'Discussions': 'https://github.com/dkrajzew/db2qthelp/discussions',
     },
     license='GPLv3',
-    packages = [""],
+    packages = ["", "data"],
     package_dir = { "": "db2qthelp", "data": "db2qthelp/data" },
+    package_data={"": ["data/*"]},
     entry_points = {
         'console_scripts': [
             'db2qthelp = db2qthelp:script_run'
