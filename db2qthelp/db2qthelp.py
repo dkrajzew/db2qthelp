@@ -6,7 +6,7 @@ __author__     = "Daniel Krajzewicz"
 __copyright__  = "Copyright 2022-2025, Daniel Krajzewicz"
 __credits__    = ["Daniel Krajzewicz"]
 __license__    = "GPLv3"
-__version__    = "0.2.0"
+__version__    = "0.4.0"
 __maintainer__ = "Daniel Krajzewicz"
 __email__      = "daniel@krajzewicz.de"
 __status__     = "Development"
@@ -503,7 +503,7 @@ def main(arguments : List[str] = None) -> int:
     parser.add_argument("--generate-qhp-template", dest="generate_qhp_template", action="store_true", default=False, help="If set, a QtHelp project (.qhp) template is generated")
     parser.add_argument("-Q", "--qt-path", dest="qt_path", default="", help="Sets the path to the Qt binaries")
     parser.add_argument("-X", "--xslt-path", dest="xslt_path", default="", help="Sets the path to xsltproc")
-    parser.add_argument('--version', action='version', version='%(prog)s 0.2.0')
+    parser.add_argument('--version', action='version', version='%(prog)s 0.4.0')
     parser.set_defaults(**defaults)
     args = parser.parse_args(remaining_argv)
     # - generate the css template and quit, if wished

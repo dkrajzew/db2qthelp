@@ -7,7 +7,7 @@ Assuming that you are interested in [DocBook](https://docbook.org/), you are pro
 
 ## Installing db2qthelp
 
-The current version is [db2qthelp-0.2](https://github.com/dkrajzew/db2qthelp/releases/tag/0.2).
+The current version is [db2qthelp-0.4.0](https://github.com/dkrajzew/db2qthelp/releases/tag/0.4.0).
 
 You have different options for installing __db2qthelp__.
 
@@ -48,10 +48,10 @@ Please note that the current repository version may contain an in-between versio
 
 Besides, you may __download the current release__ here:
 
-* [db2qthelp-0.2.zip](https://github.com/dkrajzew/db2qthelp/archive/refs/tags/0.2.zip)
-* [db2qthelp-0.2.tar.gz](https://github.com/dkrajzew/db2qthelp/archive/refs/tags/0.2.tar.gz)
+* [db2qthelp-0.4.0.zip](https://github.com/dkrajzew/db2qthelp/archive/refs/tags/0.4.0.zip)
+* [db2qthelp-0.4.0.tar.gz](https://github.com/dkrajzew/db2qthelp/archive/refs/tags/0.4.0.tar.gz)
 
-You will get the complete copy of the repository which you have to decompress. A folder named ```db2qthelp-0.2``` will be generated.
+You will get the complete copy of the repository which you have to decompress. A folder named ```db2qthelp-0.4.0``` will be generated.
 
 You may run __db2qthelp__ using 
 
