@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+    <namespace>tst4</namespace>
+    <virtualFolder>doc</virtualFolder>
+    <filterSection>
+        <filterAttribute>tst4</filterAttribute>
+        <toc>
+            <section title="Documentation" ref="user.html">
+            </section>
+            <section title="1. chp1title" ref="doc4-chp1.html">
+            </section>
+            <section title="Appendix A. app1title" ref="doc4-app1.html">
+            </section>
+
+        </toc>
+        <keywords>
+            <keyword name="Documentation" ref="./user.html"/>
+            <keyword name="1. chp1title" ref="./doc4-chp1.html"/>
+            <keyword name="Appendix A. app1title" ref="./doc4-app1.html"/>
+        </keywords>
+        <files>
+            <file>*.html</file>
+            <file>*.png</file>
+            <file>*.gif</file>
+        </files>
+    </filterSection>
+</QtHelpProject>

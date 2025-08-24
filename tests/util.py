@@ -41,8 +41,8 @@ def pname(txt, path="<DIR>"):
 def tread(filepath):
     return filepath.read_text(encoding="utf-8")
 
-#def bread(filepath):
-#    return filepath.read_bytes()
+def bread(filepath):
+    return filepath.read_bytes()
 
 def pdirtimename(txt, tmp_path):
     regex = r'([0-9]):([0-5][0-9]):([0-5][0-9])(\.[0-9]+)?'
@@ -71,8 +71,8 @@ def compare_files(tmp_path, folder, ext):
             _, file_extension = os.path.splitext(file)
             if ext!=file_extension:
                 continue
-        orig = tread(Path(TEST_PATH) / folder / file)
-        gen = tread(Path(tmp_path) / folder / file)
+        orig = bread(Path(TEST_PATH) / folder / file)
+        gen = bread(Path(tmp_path) / folder / file)
         if orig!=gen:
             wrong += 1 # pragma: no cover
             print(f"Mismatch for '{file}'") # pragma: no cover

@@ -67,6 +67,33 @@ def test_main_errors__missing_css_definition(capsys, tmp_path):
     assert pname(captured.err) == """db2qthelp: error: did not find CSS definition file 'foo.css'; you may generate one using the option --generate-css-definition
 """
 
+def test_main_errors__missing_config(capsys, tmp_path):
+    """Generates a template using the short option"""
+    copy_files(tmp_path, ["tstdoc1.xml"])
+    try:
+        db2qthelp.main(["-c", "foo.cfg"])
+        assert False # pragma: no cover
+    except SystemExit as e:
+        assert type(e)==type(SystemExit())
+        assert e.code==2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert pname(captured.err) == """db2qthelp: error: configuration file 'foo.cfg' does not exist
+"""
+
+def test_main_errors__unknown_extension(capsys, tmp_path):
+    """Generates a template using the short option"""
+    try:
+        db2qthelp.main(["-i", "foo.cfg"])
+        assert False # pragma: no cover
+    except SystemExit as e:
+        assert type(e)==type(SystemExit())
+        assert e.code==2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert pname(captured.err) == """db2qthelp: error: unrecognized input extension '.cfg'
+"""
+
 def test_main_errors__no_xsltproc(capsys, tmp_path):
     """Generates a template using the short option"""
     copy_files(tmp_path, ["tstdoc1.xml"])

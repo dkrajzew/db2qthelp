@@ -463,8 +463,8 @@ def main(arguments : List[str] = None) -> int:
     errors = []
     if args.input is None:
         errors.append("no input file given (use -i <HTML_DOCBOOK>)...")
-    elif os.path.isfile(args.input) and (not args.input.endswith(".html") and not args.input.endswith(".xml")):
-        errors.append("unrecognized input extension '{os.path.splitext(args.input)[1]}'")
+    elif not os.path.isdir(args.input) and (not args.input.endswith(".html") and not args.input.endswith(".xml")):
+        errors.append(f"unrecognized input extension '{os.path.splitext(args.input)[1]}'")
     elif not os.path.exists(args.input):
         errors.append(f"did not find input '{args.input}'")
     if args.qhp_template is not None and not os.path.exists(args.qhp_template):
@@ -503,4 +503,3 @@ def script_run() -> int:
 # -- main check
 if __name__ == '__main__':
     main(sys.argv[1:]) # pragma: no cover
-

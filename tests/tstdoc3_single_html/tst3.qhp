@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+    <namespace>tst3</namespace>
+    <virtualFolder>doc</virtualFolder>
+    <filterSection>
+        <filterAttribute>tst3</filterAttribute>
+        <toc>
+            <section title="Documentation" ref="user.html">
+            </section>
+            <section title="1. chp1title" ref="doc3-chp1.html">
+            </section>
+
+        </toc>
+        <keywords>
+            <keyword name="Documentation" ref="./user.html"/>
+            <keyword name="1. chp1title" ref="./doc3-chp1.html"/>
+        </keywords>
+        <files>
+            <file>*.html</file>
+            <file>*.png</file>
+            <file>*.gif</file>
+        </files>
+    </filterSection>
+</QtHelpProject>

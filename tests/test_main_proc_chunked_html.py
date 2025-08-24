@@ -29,7 +29,6 @@ from util import pdirtimename, copy_files, compare_files, TEST_PATH
 # --- test functions ------------------------------------------------
 def test_main_proc_chunked_html__1(capsys, tmp_path):
     """Generates a template using the short option"""
-    os.environ["PATH"] += os.pathsep + "D:\\products\\z_dev\\docbook\\libxslt-1.1.26.win32\\bin"
     os.makedirs(tmp_path / "tstdoc1_chunked_html", exist_ok=True)
     copy_files(tmp_path, ["tstdoc1_chunked_html/*.html"])
     assert compare_files(tmp_path, "tstdoc1_chunked_html", ".html")==(11, 0)

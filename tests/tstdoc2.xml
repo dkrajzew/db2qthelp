@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book id="user">
+  <bookinfo id="index">
+    <title>Documentation</title>
+
+    <productname>dbqthelp</productname>
+
+    <productnumber>v0.2.0</productnumber>
+
+    <author>
+      <firstname>Daniel</firstname>
+
+      <surname>Krajzewicz</surname>
+    </author>
+
+    <copyright>
+      <year>2022-2025</year>
+    </copyright>
+  </bookinfo>
+
+  <toc></toc>
+
+  <chapter id="doc2-chp1">
+    <title>chp1title</title>
+
+    <para>chp1blurb <inlinegraphic fileref="images/img1.gif" />.</para>
+
+    <figure>
+      <title>figureblurb.</title>
+
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" fileref="images/img2.gif" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+
+  </chapter>
+
+</book>
