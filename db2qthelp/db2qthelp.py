@@ -411,72 +411,11 @@ class Db2QtHelp:
 def main(arguments : List[str] = None) -> int:
     """The main method using parameter from the command line.
 
-    The application deletes previously collected and build .html, .png, and
-    .gif-files within the folder defined by --destination. Then, it copies
-    .png and .gif-files from the folders defined using --files into the
-    destination folder.
-
-    It then reads the HTML-file generated from DocBook defined using --input
-    and processes it. Processing means here that the file is split at sections
-    and appendices. Each subpart is written into the destination folder defined
-    using --destination and included in the table of contents (toc). The paths
-    to references images as defined using --files are replaced by the
-    destination path defined using --destination. In addition, the headers are
-    included in the list of keywords.
-
-    Then, the qhp-templated defined using --template is loaded and the
-    placeholders (see above) are replaced by the given / collected data.
-
-    db2qthelp generates a qhcp file afterwards as
-    "&lt;DESTINATION_FOLDER>/&lt;APPLICATION_NAME&gt;.qhcp".
-
-    Finally, the script calls two QtHelp processing applications which must be
-    located in the folder defined using --path:
-
-    &lt;QT_PATH&gt;/qhelpgenerator &lt;APPLICATION_NAME&gt;.qhp -o &lt;APPLICATION_NAME&gt;.qch
-    &lt;QT_PATH&gt;/qcollectiongenerator &lt;APPLICATION_NAME&gt;.qhcp -o &lt;APPLICATION_NAME&gt;.qhc
-
     Args:
-        arguments (List[str]): The command line arguments, parsed as options using OptionParser.
+        arguments (List[str]): A list of command line arguments.
 
     Returns:
-        (int): The return code
-
-    Options
-    -------
-
-    The following options must be set:
-
-    --input / -i &lt;DOCBOOK_HTML&gt;:
-        Defines the DocBook HTML document to parse
-
-    --appname / -a &lt;APPLICATION_NAME&gt;:
-        Sets the name of the application
-
-    --source / -s &lt;ADDITIONAL_FILES_FOLDER&gt;:
-        Sets the documentation source url
-
-
-    The following options are optional:
-
-    --files / -f &lt;ADDITIONAL_FILES_FOLDER&gt;[,&lt;ADDITIONAL_FILES_FOLDER&gt;]*:
-        Sets the folder(s) to collect files from
-
-    --destination / -d &lt;DESTINATION_FOLDER&gt;:
-        Sets the output folder
-
-    --template / -t &lt;TEMPLATE_FILE&gt;:
-        Defines the QtHelp project template to use; default: 'template.qhp'
-
-    --generate / -g:
-        If set, the template is written to the file as defined by --template;
-        The application quits afterwards
-
-    --path / -p &lt;QT_PATH&gt;:
-        Sets the path to the Qt binaries to use
-
-    --help:
-        Prints the help screen
+        (int): The exit code (0 for success).
     """
     # parse options
     # https://stackoverflow.com/questions/3609852/which-is-the-best-way-to-allow-configuration-options-be-overridden-at-the-comman
